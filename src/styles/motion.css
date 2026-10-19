@@ -1,0 +1,289 @@
+/*
+ * Motion. Every effect animates only transform/rotate/opacity (compositor-friendly, 60fps) or is a
+ * View Transition snapshot. Scroll-linked effects use CSS scroll timelines, so they run off the main thread.
+ * Nothing here applies under prefers-reduced-motion.
+ */
+
+/* ---------- Page and layout transitions (View Transitions API) ---------- */
+
+.site-header {
+  view-transition-name: site-header;
+}
+
+.tab-bar {
+  view-transition-name: tab-bar;
+}
+
+.purchase-bar {
+  view-transition-name: purchase-bar;
+}
+
+.tab-bar__indicator {
+  view-transition-name: tab-indicator;
+}
+
+.product-image {
+  view-transition-class: pimg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) {
+    animation-duration: 520ms;
+    animation-timing-function: var(--ease-out);
+  }
+
+  ::view-transition-old(root) {
+    animation: vt-fade-out 160ms var(--ease) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: vt-rise-in 460ms var(--ease-out) both;
+  }
+
+  /* Elements that only exist on one side (cards filtered in or out, bars appearing) */
+  ::view-transition-old(*):only-child {
+    animation: vt-shrink-out 220ms var(--ease) both;
+  }
+
+  ::view-transition-new(*):only-child {
+    animation: vt-grow-in 420ms var(--ease-out) both;
+  }
+
+  ::view-transition-new(purchase-bar):only-child,
+  ::view-transition-new(tab-bar):only-child {
+    animation: vt-slide-up 460ms var(--ease-out) both;
+  }
+
+  ::view-transition-old(purchase-bar):only-child,
+  ::view-transition-old(tab-bar):only-child {
+    animation: vt-slide-down 200ms var(--ease) both;
+  }
+
+  /* Product photos morph between wells of different shapes without stretching */
+  ::view-transition-old(*.pimg),
+  ::view-transition-new(*.pimg) {
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes vt-shrink-out {
+  to {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@keyframes vt-grow-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@keyframes vt-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes vt-slide-down {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+/* ---------- Shared keyframes ---------- */
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+/* Apple-style section entrance: a slight scale with the fade */
+@keyframes settle-in {
+  from {
+    opacity: 0;
+    transform: translateY(48px) scale(0.98);
+  }
+}
+
+@keyframes word-rise {
+  from {
+    transform: translateY(108%);
+  }
+}
+
+@keyframes appear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ---------- Home intro: one orchestrated sequence on the first visit of the session ---------- */
+
+  .is-intro .hero__eyebrow {
+    animation: fade-rise 900ms var(--ease-out) 40ms both;
+  }
+
+  .is-intro .hero__word > span {
+    animation: word-rise 1100ms var(--ease-out) both;
+    animation-delay: calc(var(--i) * 80ms + 120ms);
+  }
+
+  .is-intro .hero__sub {
+    animation: fade-rise 1000ms var(--ease-out) 480ms both;
+  }
+
+  .is-intro .hero__actions {
+    animation: fade-rise 1000ms var(--ease-out) 600ms both;
+  }
+
+  .is-intro .chapters__list > li {
+    animation: fade-rise 900ms var(--ease-out) both;
+    animation-delay: calc(720ms + var(--i, 0) * 60ms);
+  }
+
+  .is-intro .shelf__track > li {
+    animation: settle-in 1100ms var(--ease-out) both;
+    animation-delay: calc(820ms + min(var(--i, 0), 5) * 80ms);
+  }
+
+  /* ---------- Product detail entrance ---------- */
+
+  .detail__info > * {
+    animation: fade-rise 800ms var(--ease-out) both;
+    animation-delay: calc(var(--n, 0) * 45ms + 80ms);
+  }
+
+  .detail__info > :nth-child(2) { --n: 1; }
+  .detail__info > :nth-child(3) { --n: 2; }
+  .detail__info > :nth-child(4) { --n: 3; }
+  .detail__info > :nth-child(5) { --n: 4; }
+  .detail__info > :nth-child(6) { --n: 5; }
+  .detail__info > :nth-child(n + 7) { --n: 6; }
+
+  /* ---------- Scroll-linked (off main thread where supported) ---------- */
+
+  @supports (animation-timeline: view()) {
+    .reveal,
+    .shelf__head,
+    .related h2 {
+      animation: settle-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 80%;
+    }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .site-header::after {
+      animation: appear linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 80px;
+    }
+  }
+
+  /* ---------- Responses to the pointer ---------- */
+
+  @media (hover: hover) {
+    .product-card {
+      transition: transform 500ms var(--ease-out);
+    }
+
+    /* one animated layer per card: scaling the photo too would double the compositing work */
+    .product-card:hover {
+      transform: scale(1.015);
+    }
+  }
+
+  .button:active,
+  .catalog__view button:active,
+  .active-filters button:active,
+  .shelf__paddles button:not(:disabled):active {
+    transform: scale(0.96);
+  }
+
+  /* ---------- Sheets and dialogs: enter and exit with @starting-style ---------- */
+
+  .filter-sheet,
+  .filter-sheet::backdrop,
+  .lightbox,
+  .lightbox::backdrop {
+    transition:
+      transform 500ms var(--ease-out),
+      opacity 320ms var(--ease),
+      overlay 500ms var(--ease) allow-discrete,
+      display 500ms var(--ease) allow-discrete;
+  }
+
+  .filter-sheet:not([open]) {
+    transform: translateY(100%);
+  }
+
+  .filter-sheet::backdrop,
+  .lightbox::backdrop {
+    opacity: 1;
+  }
+
+  .filter-sheet:not([open])::backdrop,
+  .lightbox:not([open])::backdrop {
+    opacity: 0;
+  }
+
+  .lightbox:not([open]) {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  @starting-style {
+    .filter-sheet[open] {
+      transform: translateY(100%);
+    }
+
+    .filter-sheet[open]::backdrop,
+    .lightbox[open]::backdrop {
+      opacity: 0;
+    }
+
+    .lightbox[open] {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  /* ---------- Loading ---------- */
+
+  .skeleton::after {
+    animation: shimmer 1500ms var(--ease) infinite;
+  }
+}

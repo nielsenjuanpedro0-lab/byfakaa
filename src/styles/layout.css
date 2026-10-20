@@ -6,7 +6,13 @@
   top: 0;
   z-index: 20;
   padding: var(--header-gap) var(--gutter) 0;
+  /* overlaps the page by its own height, so pages can run under the pill (main makes room) */
+  margin-bottom: calc(-1 * var(--header-h));
   pointer-events: none;
+}
+
+#contenido {
+  padding-top: var(--header-h);
 }
 
 .site-header__inner {

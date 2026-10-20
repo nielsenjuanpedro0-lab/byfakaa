@@ -26,6 +26,9 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  /* runs up under the floating header, so the storefront photo shows behind the pill */
+  margin-top: calc(-1 * var(--header-h));
+  padding-top: var(--header-h);
 }
 
 .hero__bg {

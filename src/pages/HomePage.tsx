@@ -45,27 +45,38 @@ export function HomePage() {
 
   return (
     <div>
-      <section className="page hero" aria-labelledby="hero-title">
-        {inStock > 0 && (
-          <p className="hero__pill">
-            <span className="hero__dot" aria-hidden />
-            {inStock === 1 ? '1 equipo en stock ahora' : `${inStock} equipos en stock ahora`}
+      <section className="hero" aria-labelledby="hero-title">
+        {/* The real storefront, faded into the canvas: proof there is a shop you can walk into */}
+        <img
+          className="hero__bg"
+          src="/brand/local-fachada.jpg"
+          alt={`Fachada del local By Faka en ${store.address}`}
+          width={1600}
+          height={1200}
+          fetchPriority="high"
+        />
+        <div className="page hero__inner">
+          {inStock > 0 && (
+            <p className="hero__pill">
+              <span className="hero__dot" aria-hidden />
+              {inStock === 1 ? '1 equipo en stock ahora' : `${inStock} equipos en stock ahora`}
+            </p>
+          )}
+          <h1 id="hero-title">
+            Tecnología <span>a tu alcance.</span>
+          </h1>
+          <p className="hero__sub">
+            iPhones nuevos, sellados y usados seleccionados en Mar del Plata. Vení a verlos en persona a {store.address}.
           </p>
-        )}
-        <h1 id="hero-title">
-          Tecnología <span>a tu alcance.</span>
-        </h1>
-        <p className="hero__sub">
-          iPhones nuevos, sellados y usados seleccionados en Mar del Plata. Vení a verlos en persona a {store.address}.
-        </p>
-        <div className="hero__actions">
-          <Link className="button" to={`/catalogo?${param.available}=1`} viewTransition>Ver equipos disponibles</Link>
-          <a className="button button--outline" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
-            <InstagramIcon aria-hidden size={18} />
-            Escribinos
-          </a>
+          <div className="hero__actions">
+            <Link className="button" to={`/catalogo?${param.available}=1`} viewTransition>Ver equipos disponibles</Link>
+            <a className="button button--outline" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
+              <InstagramIcon aria-hidden size={18} />
+              Escribinos
+            </a>
+          </div>
+          <Showcase catalog={catalog} />
         </div>
-        <Showcase catalog={catalog} />
       </section>
 
       <section className="page lines reveal" aria-labelledby="lines-title">

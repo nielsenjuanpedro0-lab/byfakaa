@@ -174,7 +174,15 @@
   top: calc(var(--header-h) + var(--s-5));
   max-height: calc(100dvh - var(--header-h) - var(--s-7));
   overflow-y: auto;
-  scrollbar-width: thin;
+  padding-right: var(--s-3);
+  overscroll-behavior: contain;
+  /* still scrolls, without the native scrollbar; the fade says there is more below */
+  scrollbar-width: none;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 3rem), transparent);
+}
+
+.catalog__aside::-webkit-scrollbar {
+  display: none;
 }
 
 .filters__toggle {

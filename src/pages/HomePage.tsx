@@ -2,14 +2,11 @@ import { ArrowRight, ChevronRight } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router'
 import { InstagramIcon } from '../components/InstagramIcon'
-import { PhoneArt } from '../components/PhoneArt'
 import { store } from '../config/store'
 import { CatalogGate } from '../features/products/components/CatalogGate'
 import { InquiryActions } from '../features/products/components/InquiryActions'
 import { ProductCard } from '../features/products/components/ProductCard'
-import { ProductImage } from '../features/products/components/ProductImage'
 import { conditionSlug, param } from '../features/products/filters'
-import { conditionLabel, formatPrice, variantSummary } from '../features/products/format'
 import type { Catalog, Product } from '../features/products/types'
 import { useCatalog } from '../features/products/useCatalog'
 import { useTitle } from '../lib/useTitle'
@@ -17,7 +14,6 @@ import { useTitle } from '../lib/useTitle'
 const GRID_SIZE = 8
 
 const availableOf = (catalog: Catalog) => catalog.products.filter((p) => p.availability !== 'out_of_stock')
-const productUrl = (p: Product) => `/producto/${encodeURIComponent(p.id)}`
 
 /** The four ways to buy, in the owner's words. Links go to the closest filter the catalog supports. */
 const lines = [
@@ -76,7 +72,6 @@ export function HomePage() {
               Escribinos
             </a>
           </div>
-          <Showcase catalog={catalog} />
         </div>
       </section>
 
@@ -158,40 +153,6 @@ export function HomePage() {
 
       <Visit />
     </div>
-  )
-}
-
-/** Noir-style glowing stage under the hero: the newest unit's photo, or the vector iPhone when it has none. */
-function Showcase({ catalog }: { catalog?: Catalog }) {
-  const available = catalog ? availableOf(catalog) : []
-  const unit = [...available].sort((a, b) => (b.addedAt ?? 0) - (a.addedAt ?? 0))[0]
-
-  const photo = unit && (unit.images[0] ?? unit.thumbs[0])
-
-  if (!unit || !photo) {
-    return (
-      <div className="showcase" aria-hidden>
-        <div className="showcase__stage">
-          <div className="showcase__float">
-            <PhoneArt />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const details = [variantSummary(unit), unit.condition && conditionLabel[unit.condition]].filter(Boolean).join(' · ')
-  return (
-    <Link className="showcase" to={productUrl(unit)} viewTransition>
-      <div className="showcase__stage">
-        <ProductImage src={photo} illustrative={unit.illustrative} alt={unit.name} priority className="showcase__photo" />
-      </div>
-      <p className="showcase__tag">Último ingreso</p>
-      <p className="showcase__name">{unit.name}</p>
-      <p className="showcase__meta">
-        {[details, unit.price ? formatPrice(unit.price) : 'Consultar precio'].filter(Boolean).join(' — ')}
-      </p>
-    </Link>
   )
 }
 

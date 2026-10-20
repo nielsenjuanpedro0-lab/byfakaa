@@ -166,14 +166,6 @@
     }
   }
 
-  @supports (animation-timeline: scroll()) {
-    .site-header::after {
-      animation: appear linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 80px;
-    }
-  }
-
   /* ---------- Responses to the pointer ---------- */
 
   @media (hover: hover) {

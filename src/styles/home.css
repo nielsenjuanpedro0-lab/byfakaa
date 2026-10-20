@@ -1,4 +1,4 @@
-/* Home: centered hero with a glowing showcase, the four lines, stock grid, steps, tips, visit band. */
+/* Home: centered hero, the four lines, stock grid, steps, tips, visit band. */
 
 /* Shared section heading: title on the left, short note or link on the right */
 .section-head {
@@ -21,7 +21,7 @@
   color: var(--ink-soft);
 }
 
-/* ---------- Hero: centered copy, showcase below, storefront photo faded behind ---------- */
+/* ---------- Hero: centered copy, storefront photo faded behind ---------- */
 .hero {
   position: relative;
   isolation: isolate;
@@ -104,71 +104,6 @@
   justify-content: center;
   gap: var(--s-3);
   margin-top: var(--s-6);
-}
-
-/* ---------- Showcase: the latest unit on a lit stage ---------- */
-.showcase {
-  display: grid;
-  justify-items: center;
-  margin-top: var(--s-8);
-  color: var(--ink);
-  text-decoration: none;
-}
-
-.showcase__stage {
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  place-items: center;
-  width: min(80vw, 26rem);
-  aspect-ratio: 1;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 60%, var(--accent-glow), transparent 62%), #050505;
-  box-shadow: 0 0 0 1.25rem rgb(255 255 255 / 0.02);
-}
-
-.showcase__photo {
-  width: 62%;
-  border-radius: var(--r-card);
-}
-
-.showcase__tag {
-  margin-top: var(--s-6);
-  font-size: var(--t-xs);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.showcase__name {
-  margin-top: var(--s-2);
-  font-family: var(--font-display);
-  font-size: var(--t-lg);
-  font-weight: 300;
-}
-
-.showcase__meta {
-  margin-top: var(--s-1);
-  font-size: var(--t-sm);
-  color: var(--ink-soft);
-}
-
-a.showcase:hover .showcase__name {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-/* Vector iPhone shown until the newest unit has a photo */
-.showcase__float {
-  width: 40%;
-  filter: drop-shadow(0 2.5rem 3rem var(--accent-glow));
-}
-
-.phone-art {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 /* ---------- Lines: four cards with orange numbering ---------- */
@@ -444,9 +379,6 @@ a.showcase:hover .showcase__name {
     font-size: var(--t-base);
   }
 
-  .showcase {
-    margin-top: var(--s-7);
-  }
 
   .lines,
   .available,
@@ -479,29 +411,6 @@ a.showcase:hover .showcase__name {
 }
 
 /* ---------- Motion: transform and opacity only, off for reduced motion ---------- */
-@keyframes float {
-  50% {
-    transform: translateY(-12px) rotate(-1.5deg);
-  }
-}
-
-@keyframes sheen {
-  0%,
-  55% {
-    transform: rotate(18deg) translateX(0);
-  }
-
-  100% {
-    transform: rotate(18deg) translateX(520px);
-  }
-}
-
-@keyframes glow {
-  50% {
-    opacity: 0.55;
-  }
-}
-
 @keyframes rise {
   from {
     opacity: 0;
@@ -510,29 +419,6 @@ a.showcase:hover .showcase__name {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .showcase__float {
-    animation: float 7s ease-in-out infinite;
-    will-change: transform;
-  }
-
-  .phone-art__sheen {
-    transform-box: view-box;
-    transform-origin: 150px 310px;
-    animation: sheen 6s ease-in-out 1.2s infinite;
-  }
-
-  /* the stage's glow breathes slowly */
-  .showcase__stage::after {
-    content: '';
-    position: absolute;
-    inset: 12%;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--accent-glow), transparent 70%);
-    animation: glow 5s ease-in-out infinite;
-    pointer-events: none;
-    z-index: -1;
-  }
-
   /* hero copy enters once, staggered */
   .hero__inner > * {
     animation: rise 900ms var(--ease-out) both;

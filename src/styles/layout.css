@@ -1,23 +1,11 @@
 /* Header, footer. Breakpoint: 900px separates touch-first and pointer layouts. */
 
-/* Apple-style global nav: thin, translucent, blurred */
+/* Floating pill nav: the header itself is transparent, only the pill is glass */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--nav-bg);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-}
-
-/* Hairline that fades in once the page scrolls (scroll timeline in motion.css) */
-.site-header::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0;
-  height: 1px;
-  background: var(--line);
-  opacity: 0;
+  padding: var(--header-gap) var(--gutter) 0;
   pointer-events: none;
 }
 
@@ -25,7 +13,19 @@
   display: flex;
   align-items: center;
   gap: var(--s-5);
-  height: var(--header-h);
+  width: auto;
+  max-width: calc(var(--page-max) - 2 * var(--gutter));
+  height: var(--header-pill);
+  margin-inline: auto;
+  padding-inline: var(--s-4) var(--s-2);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: var(--r-pill);
+  /* lifted off the near-black page so the pill reads as an object */
+  background: rgb(30 30 30 / 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+  pointer-events: auto;
 }
 
 .wordmark {
@@ -40,7 +40,7 @@
 
 .wordmark__name {
   font-family: var(--font-display);
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 400;
   letter-spacing: var(--track-wide);
   text-transform: uppercase;
@@ -56,22 +56,27 @@
 .site-nav {
   display: flex;
   justify-content: center;
-  gap: var(--s-6);
+  gap: var(--s-1);
   flex: 1;
 }
 
 .site-nav a {
-  font-size: var(--t-xs);
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-pill);
+  font-size: var(--t-sm);
   letter-spacing: -0.01em;
-  color: var(--ink);
-  opacity: 0.8;
+  color: var(--ink-soft);
   text-decoration: none;
-  transition: opacity var(--dur) var(--ease);
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
 }
 
-.site-nav a:hover,
+.site-nav a:hover {
+  color: var(--ink);
+}
+
 .site-nav a.active {
-  opacity: 1;
+  background: rgb(255 255 255 / 0.08);
+  color: var(--ink);
 }
 
 .header-search {
@@ -91,12 +96,12 @@
 
 .header-search input {
   width: 100%;
-  height: 2rem;
-  padding: 0 var(--s-3) 0 2.125rem;
+  height: 2.5rem;
+  padding: 0 var(--s-4) 0 2.25rem;
   border: 0;
   border-radius: var(--r-pill);
-  background: rgb(255 255 255 / 0.1);
-  font-size: var(--t-xs);
+  background: rgb(255 255 255 / 0.08);
+  font-size: var(--t-sm);
 }
 
 .header-search input::placeholder,
@@ -107,14 +112,14 @@
 /* the class lands on the button, or on its wrapper in Instagram-fallback mode */
 .site-header a.site-header__cta,
 .site-header .site-header__cta .button {
-  min-height: 1.875rem;
-  padding: 0 0.875rem;
-  font-size: var(--t-xs);
+  min-height: 2.5rem;
+  padding: 0 1.125rem;
+  font-size: var(--t-sm);
 }
 
 .site-header .site-header__cta svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .header-search-link {
@@ -255,8 +260,17 @@
     letter-spacing: 0.14em;
   }
 
+  .site-header {
+    padding-inline: var(--s-2);
+  }
+
   .site-header__inner {
     gap: var(--s-3);
+    padding-inline: var(--s-4) var(--s-2);
+  }
+
+  .site-nav a.active {
+    background: none;
   }
 
   .site-nav a {
@@ -270,7 +284,6 @@
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
-    margin-right: calc(var(--s-3) * -1);
     color: var(--ink);
   }
 }

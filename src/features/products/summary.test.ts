@@ -3,7 +3,7 @@ import { fromPrice } from './summary'
 import type { Product } from './types'
 
 const p = (name: string, amount: number, currency = 'USD', condition: Product['condition'] = 'used'): Product => ({
-  id: `${name}${amount}`, name, images: [], availability: 'low_stock', price: { amount, currency }, condition,
+  id: `${name}${amount}`, name, images: [], thumbs: [], illustrative: false, availability: 'low_stock', price: { amount, currency }, condition,
 })
 
 describe('summary', () => {
@@ -11,7 +11,7 @@ describe('summary', () => {
 
   it('prefers USD for "desde"', () => {
     expect(fromPrice(products)).toEqual({ amount: 200, currency: 'USD' })
-    expect(fromPrice([{ id: 'x', name: 'x', images: [], availability: 'unknown' }])).toBeUndefined()
+    expect(fromPrice([{ id: 'x', name: 'x', images: [], thumbs: [], illustrative: false, availability: 'unknown' }])).toBeUndefined()
   })
 
 })

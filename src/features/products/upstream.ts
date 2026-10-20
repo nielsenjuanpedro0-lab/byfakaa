@@ -16,6 +16,8 @@ const upstreamProduct = z.object({
   name: text,
   description: z.nullish(text),
   images: z.nullish(z.array(z.string())),
+  thumbnails: z.nullish(z.array(z.string())),
+  illustrative: z.nullish(z.boolean()),
   price: z.nullish(z.number().check(z.nonnegative())),
   currency: z.nullish(z.string().check(z.length(3))),
   stock: z.nullish(z.int().check(z.nonnegative())),
@@ -36,6 +38,8 @@ const LOW_STOCK_MAX = 2
 // Only http(s), root-relative and inline images; anything else from the API is dropped.
 const SAFE_IMAGE = /^(https?:\/\/|\/(?!\/)|data:image\/)/i
 
+const safeImages = (list: string[] | null | undefined) => (list ?? []).map((src) => src.trim()).filter((src) => SAFE_IMAGE.test(src))
+
 function availabilityOf(stock: number | null | undefined): Availability {
   if (stock == null) return 'unknown'
   if (stock === 0) return 'out_of_stock'
@@ -47,7 +51,9 @@ function toProduct(raw: UpstreamProduct): Product {
     id: String(raw.id),
     name: raw.name,
     description: raw.description ?? undefined,
-    images: (raw.images ?? []).map((src) => src.trim()).filter((src) => SAFE_IMAGE.test(src)),
+    images: safeImages(raw.images),
+    thumbs: safeImages(raw.thumbnails),
+    illustrative: raw.illustrative ?? false,
     // A price without a currency cannot be shown honestly, so it is treated as missing.
     price: raw.price != null && raw.currency ? { amount: raw.price, currency: raw.currency.toUpperCase() } : undefined,
     availability: availabilityOf(raw.stock),

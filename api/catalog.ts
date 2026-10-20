@@ -21,13 +21,17 @@ interface StackrUnit {
   battery?: number | string | null
   in_catalog?: boolean
   created_at?: string
-  photos?: unknown[]
+  /** Ready-to-use thumbnail URLs for listings. */
+  miniaturas?: unknown[] | null
+  /** Large photo URLs for the product page; the first is the cover. */
+  fotos?: unknown[] | null
+  /** "equipo" (this unit), "modelo" (borrowed from an identical model) or null (no photos). */
+  fotos_origen?: 'equipo' | 'modelo' | null
 }
 
 const CATEGORY = /^(iPhone|iPad|AirPods|Apple Watch|MacBook|iMac|AirTag)/i
 
-const photoUrl = (photo: unknown): string | undefined =>
-  typeof photo === 'string' ? photo : ((photo as { url?: unknown } | null)?.url as string | undefined)
+const urls = (list: unknown[] | null | undefined) => (list ?? []).filter((src): src is string => typeof src === 'string' && !!src)
 
 /** Maps one Stackr unit to the public catalog item. Internal fields (imei, notes, deposit, supplier, cost) are dropped. */
 export function toPublicItem(unit: StackrUnit) {
@@ -45,7 +49,10 @@ export function toPublicItem(unit: StackrUnit) {
     // each Stackr record is one physical unit
     stock: 1,
     added_at: unit.created_at ?? null,
-    images: (unit.photos ?? []).map(photoUrl).filter((src): src is string => !!src),
+    images: urls(unit.fotos),
+    thumbnails: urls(unit.miniaturas),
+    // Photos of an identical model, not this unit: the page must say so.
+    illustrative: unit.fotos_origen === 'modelo',
     description: battery ? `Salud de batería: ${battery}${/^\d+$/.test(battery) ? '%' : ''}.` : null,
   }
 }

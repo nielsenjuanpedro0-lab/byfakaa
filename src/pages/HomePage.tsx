@@ -2,6 +2,7 @@ import { ArrowRight, ChevronRight } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router'
 import { InstagramIcon } from '../components/InstagramIcon'
+import { PhoneArt } from '../components/PhoneArt'
 import { store } from '../config/store'
 import { CatalogGate } from '../features/products/components/CatalogGate'
 import { InquiryActions } from '../features/products/components/InquiryActions'
@@ -160,17 +161,19 @@ export function HomePage() {
   )
 }
 
-/** Noir-style glowing stage under the hero: the newest unit in stock, or a drawn phone while the catalog loads. */
+/** Noir-style glowing stage under the hero: the newest unit's photo, or the vector iPhone when it has none. */
 function Showcase({ catalog }: { catalog?: Catalog }) {
   const available = catalog ? availableOf(catalog) : []
   const unit = [...available].sort((a, b) => (b.addedAt ?? 0) - (a.addedAt ?? 0))[0]
 
-  if (!unit?.images[0]) {
+  const photo = unit && (unit.images[0] ?? unit.thumbs[0])
+
+  if (!unit || !photo) {
     return (
       <div className="showcase" aria-hidden>
         <div className="showcase__stage">
-          <div className="phone">
-            <div className="phone__cams"><i /><i /><i /></div>
+          <div className="showcase__float">
+            <PhoneArt />
           </div>
         </div>
       </div>
@@ -181,7 +184,7 @@ function Showcase({ catalog }: { catalog?: Catalog }) {
   return (
     <Link className="showcase" to={productUrl(unit)} viewTransition>
       <div className="showcase__stage">
-        <ProductImage src={unit.images[0]} alt={unit.name} priority className="showcase__photo" />
+        <ProductImage src={photo} illustrative={unit.illustrative} alt={unit.name} priority className="showcase__photo" />
       </div>
       <p className="showcase__tag">Último ingreso</p>
       <p className="showcase__name">{unit.name}</p>

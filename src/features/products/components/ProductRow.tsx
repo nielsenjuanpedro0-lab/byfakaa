@@ -14,7 +14,7 @@ export function ProductRow({ product, index = 0 }: { product: Product; index?: n
 
   return (
     <li className={`product-row${soldOut ? ' is-sold-out' : ''}`} style={{ '--i': index } as CSSProperties}>
-      <ProductImage src={product.images[0]} alt="" className="product-row__thumb" vtName={vtName('pimg', product.id)} />
+      <ProductImage src={product.thumbs[0] ?? product.images[0]} illustrative={product.illustrative} alt="" className="product-row__thumb" vtName={vtName('pimg', product.id)} />
       <div className="product-row__text">
         <Link to={`/producto/${encodeURIComponent(product.id)}`} className="product-row__name" viewTransition>
           {product.name}

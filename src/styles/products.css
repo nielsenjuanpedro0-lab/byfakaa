@@ -14,6 +14,19 @@
   object-fit: contain;
 }
 
+/* Photo of an identical model, not this unit */
+.product-image__note {
+  position: absolute;
+  left: var(--s-2);
+  bottom: var(--s-2);
+  padding: 0.125rem var(--s-2);
+  border-radius: var(--r-pill);
+  background: rgb(0 0 0 / 0.65);
+  font-size: var(--t-xs);
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+
 .product-image__empty {
   display: flex;
   flex-direction: column;

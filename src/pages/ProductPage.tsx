@@ -57,7 +57,7 @@ function ProductDetail({ product, catalog }: { product: Product; catalog: Catalo
 
       <article className="detail">
         <div className="detail__media">
-          <Gallery images={product.images} name={product.name} vtName={vtName('pimg', product.id)} />
+          <Gallery images={product.images} illustrative={product.illustrative} thumbs={product.thumbs} name={product.name} vtName={vtName('pimg', product.id)} />
         </div>
 
         <div className="detail__info">

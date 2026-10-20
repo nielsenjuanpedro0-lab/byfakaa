@@ -16,6 +16,10 @@ export interface Product {
   description?: string
   /** Absolute or root-relative URLs, already checked to be safe image sources. */
   images: string[]
+  /** Small versions for listings, same order as `images`. May be empty even when `images` is not. */
+  thumbs: string[]
+  /** The photos show an identical model, not this unit ("Foto ilustrativa"). */
+  illustrative: boolean
   price?: Money
   availability: Availability
   /** Units on hand, when the API reports it. */

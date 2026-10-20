@@ -7,13 +7,16 @@ interface Props {
   name: string
   /** view-transition-name for the first photo, matching the card it came from. */
   vtName: string
+  illustrative?: boolean
+  /** Small versions for the thumbnail strip, same order as `images`. */
+  thumbs?: string[]
 }
 
 /**
  * Swipeable on touch (scroll-snap), thumbnails on larger screens, and a full-screen zoom:
  * buyers of used phones want to inspect the condition up close.
  */
-export function Gallery({ images, name, vtName }: Props) {
+export function Gallery({ images, name, vtName, illustrative = false, thumbs = [] }: Props) {
   const trackRef = useRef<HTMLDivElement>(null)
   const zoomRef = useRef<HTMLDialogElement>(null)
   const [index, setIndex] = useState(0)
@@ -51,6 +54,7 @@ export function Gallery({ images, name, vtName }: Props) {
               src={src}
               alt={`${name}, foto ${i + 1} de ${count}`}
               priority={i === 0}
+              illustrative={illustrative}
               vtName={i === 0 ? vtName : undefined}
             />
           </button>
@@ -65,7 +69,7 @@ export function Gallery({ images, name, vtName }: Props) {
           <div className="gallery__thumbs">
             {images.map((src, i) => (
               <button key={src} type="button" aria-label={`Ver foto ${i + 1}`} aria-current={i === index} onClick={() => show(i)}>
-                <ProductImage src={src} alt="" />
+                <ProductImage src={thumbs[i] ?? src} alt="" />
               </button>
             ))}
           </div>
@@ -84,7 +88,7 @@ export function Gallery({ images, name, vtName }: Props) {
         }}
       >
         <div className="lightbox__stage" onClick={(e) => e.target === e.currentTarget && zoomRef.current?.close()}>
-          <ProductImage src={images[zoomed]} alt={`${name}, foto ${zoomed + 1} de ${count}`} />
+          <ProductImage src={images[zoomed]} illustrative={illustrative} alt={`${name}, foto ${zoomed + 1} de ${count}`} />
         </div>
         <button type="button" className="lightbox__close" aria-label="Cerrar" onClick={() => zoomRef.current?.close()}>
           <X aria-hidden size={22} />

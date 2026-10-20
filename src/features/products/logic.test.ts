@@ -5,7 +5,7 @@ import { inquiryMessage } from './inquiry'
 import { vtName } from '../../lib/viewTransition'
 import type { Product } from './types'
 
-const p = (over: Partial<Product>): Product => ({ id: over.name ?? 'x', name: 'x', images: [], availability: 'in_stock', ...over })
+const p = (over: Partial<Product>): Product => ({ id: over.name ?? 'x', name: 'x', images: [], thumbs: [], illustrative: false, availability: 'in_stock', ...over })
 
 const products = [
   p({ name: 'iPhone 15 Pro', storage: '1 TB', condition: 'used', price: { amount: 1080, currency: 'USD' } }),

@@ -13,7 +13,7 @@ export function ProductCard({ product, priority }: { product: Product; priority?
 
   return (
     <article className={`product-card${soldOut ? ' is-sold-out' : ''}`} style={{ viewTransitionName: vtName('pcard', product.id) }}>
-      <ProductImage src={product.images[0]} alt={product.name} priority={priority} vtName={vtName('pimg', product.id)} />
+      <ProductImage src={product.thumbs[0] ?? product.images[0]} illustrative={product.illustrative} alt={product.name} priority={priority} vtName={vtName('pimg', product.id)} />
       <div className="product-card__body">
         {product.condition && (
           <p className={`condition condition--${product.condition}`}>{conditionLabel[product.condition]}</p>

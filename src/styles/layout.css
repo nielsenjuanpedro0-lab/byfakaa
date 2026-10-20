@@ -249,9 +249,19 @@
     display: none;
   }
 
+  /* the wide-tracked wordmark plus three links overflow a 375px header */
+  .wordmark__name {
+    font-size: 1rem;
+    letter-spacing: 0.14em;
+  }
+
+  .site-header__inner {
+    gap: var(--s-3);
+  }
+
   .site-nav a {
-    padding: var(--s-3) 0.4rem;
-    font-size: var(--t-sm);
+    padding: var(--s-3) 0.3rem;
+    font-size: 0.8125rem;
     white-space: nowrap;
   }
 

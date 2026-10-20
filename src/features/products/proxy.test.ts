@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { toPublicItem } from './catalog'
-import { parseCatalog } from '../src/features/products/upstream'
+import { toPublicItem } from '../../../api/catalog'
+import { parseCatalog } from './upstream'
 
 describe('toPublicItem', () => {
   it('keeps public fields only and feeds the storefront parser', () => {

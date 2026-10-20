@@ -158,7 +158,7 @@
 
   @supports (animation-timeline: view()) {
     .reveal,
-    .shelf__head,
+    .available .section-head,
     .related h2 {
       animation: settle-in linear both;
       animation-timeline: view();
@@ -189,8 +189,7 @@
 
   .button:active,
   .catalog__view button:active,
-  .active-filters button:active,
-  .shelf__paddles button:not(:disabled):active {
+  .active-filters button:active {
     transform: scale(0.96);
   }
 

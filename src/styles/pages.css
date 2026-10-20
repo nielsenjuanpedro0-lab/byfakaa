@@ -2,96 +2,6 @@
 
 /* Home hero and sections: see home.css */
 
-/* ---------- Home: shelf ---------- */
-.shelf {
-  padding-bottom: var(--s-8);
-}
-
-.shelf__head h2 {
-  max-width: 48rem;
-  text-wrap: pretty;
-  margin-bottom: var(--s-5);
-  font-size: var(--t-xl);
-  line-height: 1.1;
-}
-
-/* Apple Store two-tone heading: statement, then a softer qualifier */
-.shelf__head h2 span {
-  color: var(--ink-faint);
-}
-
-.shelf .demo-banner,
-.shelf .notice {
-  width: calc(100% - 2 * var(--gutter));
-  max-width: calc(var(--page-max) - 2 * var(--gutter));
-  margin-inline: auto;
-}
-
-.shelf .notice {
-  justify-items: start;
-}
-
-/* Bleeds to the screen edge but starts aligned with the page content */
-.shelf__track {
-  --inset: max(var(--gutter), calc((100vw - var(--page-max)) / 2 + var(--gutter)));
-  display: flex;
-  gap: var(--s-4);
-  padding: var(--s-2) var(--inset) var(--s-5);
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--inset);
-  scrollbar-width: none;
-}
-
-.shelf__track::-webkit-scrollbar {
-  display: none;
-}
-
-.shelf__track > li {
-  flex: 0 0 clamp(15rem, 22vw, 19rem);
-  scroll-snap-align: start;
-}
-
-.shelf__foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-4);
-}
-
-.shelf__paddles {
-  display: flex;
-  gap: var(--s-3);
-}
-
-.shelf__paddles button {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 0;
-  border-radius: 50%;
-  background: var(--card-raised);
-  color: var(--ink);
-  cursor: pointer;
-  transition:
-    opacity var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
-}
-
-.shelf__paddles button:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-.shelf__empty {
-  display: grid;
-  justify-items: start;
-  gap: var(--s-4);
-  color: var(--ink-soft);
-}
-
 /* ---------- Store: centered, address set like signage ---------- */
 .store-info {
   text-align: center;
@@ -668,18 +578,6 @@
 
 /* ---------- Touch-first layouts ---------- */
 @media (max-width: 899px) {
-  .shelf {
-    padding-bottom: var(--s-7);
-  }
-
-  .shelf__track > li {
-    flex-basis: min(72vw, 17rem);
-  }
-
-  .shelf__paddles {
-    display: none;
-  }
-
   .store-info__links {
     flex-direction: column;
     align-items: center;

@@ -1,6 +1,6 @@
 # By Faka: storefront
 
-Product catalog and purchase-inquiry site for By Faka, an Apple products store in Mar del Plata. Dark, Apple-style design. React 19, TypeScript, Vite, React Router; animation is CSS + View Transitions, no animation library.
+Product catalog and purchase-inquiry site for By Faka, an Apple products store in Mar del Plata. Dark "Noir" design with an orange accent. React 19, TypeScript, Vite, React Router; animation is CSS + View Transitions, no animation library.
 
 ```bash
 npm install

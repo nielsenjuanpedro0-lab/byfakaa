@@ -1,4 +1,5 @@
 import '@fontsource-variable/inter'
+import '@fontsource-variable/montserrat'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/layout.css'

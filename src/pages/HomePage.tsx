@@ -1,23 +1,41 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { ArrowRight, ChevronRight } from 'lucide-react'
+import type { CSSProperties } from 'react'
 import { Link } from 'react-router'
 import { InstagramIcon } from '../components/InstagramIcon'
 import { store } from '../config/store'
 import { CatalogGate } from '../features/products/components/CatalogGate'
-import { Finder } from '../features/products/components/Finder'
 import { InquiryActions } from '../features/products/components/InquiryActions'
 import { ProductCard } from '../features/products/components/ProductCard'
 import { ProductImage } from '../features/products/components/ProductImage'
-import { param } from '../features/products/filters'
+import { conditionSlug, param } from '../features/products/filters'
 import { conditionLabel, formatPrice, variantSummary } from '../features/products/format'
 import type { Catalog, Product } from '../features/products/types'
 import { useCatalog } from '../features/products/useCatalog'
 import { useTitle } from '../lib/useTitle'
 
-const SHELF_SIZE = 10
+const GRID_SIZE = 8
 
 const availableOf = (catalog: Catalog) => catalog.products.filter((p) => p.availability !== 'out_of_stock')
 const productUrl = (p: Product) => `/producto/${encodeURIComponent(p.id)}`
+
+/** The four ways to buy, in the owner's words. Links go to the closest filter the catalog supports. */
+const lines = [
+  { title: 'Sellados', text: 'Equipos nuevos en caja cerrada.', to: `/catalogo?${param.condition}=${conditionSlug.new}`, cta: 'Ver stock' },
+  { title: 'Like New', text: 'iPhones nuevos al precio de usados.', href: store.instagramDmUrl, cta: 'Consultar' },
+  { title: 'Usados seleccionados', text: 'Revisados uno por uno, con estado de batería informado.', to: `/catalogo?${param.condition}=${conditionSlug.used}`, cta: 'Ver stock' },
+  { title: 'Android', text: 'Motorola y otras marcas.', to: `/catalogo?${param.q}=motorola`, cta: 'Ver stock' },
+]
+
+const steps = [
+  { title: 'Elegí tu equipo', text: 'Mirá el stock y los precios acá, actualizados desde el local.' },
+  { title: 'Escribinos', text: 'Te confirmamos que siga disponible y coordinamos tu visita.' },
+  { title: 'Retiralo en el local', text: `Lo ves, lo probás y te lo llevás en ${store.address}.` },
+]
+
+const tips = [
+  { tag: 'Mito vs realidad', title: 'La batería de tu iPhone' },
+  { tag: 'Guía', title: '¿Tu iPhone es original? Así podés saberlo' },
+]
 
 export function HomePage() {
   useTitle()
@@ -28,68 +46,170 @@ export function HomePage() {
   return (
     <div>
       <section className="page hero" aria-labelledby="hero-title">
-        <div className="hero__copy">
-          <p className="hero__place">
-            {store.address} · Mar del Plata
+        {inStock > 0 && (
+          <p className="hero__pill">
+            <span className="hero__dot" aria-hidden />
+            {inStock === 1 ? '1 equipo en stock ahora' : `${inStock} equipos en stock ahora`}
           </p>
-          <h1 id="hero-title">iPhone nuevos y usados</h1>
-          <p className="hero__sub">
-            Mirá qué hay en stock y a qué precio. Consultanos por mensaje y pasá a verlo por el local.
-          </p>
-          <div className="hero__actions">
-            <Link className="button" to="/catalogo" viewTransition>Ver catálogo</Link>
-            <a className="button button--outline" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
-              <InstagramIcon aria-hidden size={18} />
-              Escribinos
-            </a>
-          </div>
-          {inStock > 0 && (
-            <p className="hero__stock">
-              {inStock === 1 ? '1 equipo en stock' : `${inStock} equipos en stock`}
-            </p>
-          )}
+        )}
+        <h1 id="hero-title">
+          Tecnología <span>a tu alcance.</span>
+        </h1>
+        <p className="hero__sub">
+          iPhones nuevos, sellados y usados seleccionados en Mar del Plata. Vení a verlos en persona a {store.address}.
+        </p>
+        <div className="hero__actions">
+          <Link className="button" to={`/catalogo?${param.available}=1`} viewTransition>Ver equipos disponibles</Link>
+          <a className="button button--outline" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
+            <InstagramIcon aria-hidden size={18} />
+            Escribinos
+          </a>
         </div>
-        {catalog && <Featured catalog={catalog} />}
+        <Showcase catalog={catalog} />
       </section>
 
-      <section className="shelf" aria-labelledby="shelf-title">
-        <div className="page shelf__head">
-          <h2 id="shelf-title">En stock</h2>
+      <section className="page lines reveal" aria-labelledby="lines-title">
+        <div className="section-head">
+          <h2 id="lines-title">Elegí cómo lo querés.</h2>
+          <p>Cuatro formas de tener tu próximo equipo. Todas con atención personalizada en el local.</p>
         </div>
-        <CatalogGate state={state} retry={retry} loading={<ShelfSkeleton />}>
-          {(c) => <Shelf products={availableOf(c)} />}
+        <ul className="lines__grid">
+          {lines.map((line, i) => (
+            <li key={line.title} className="line-card">
+              <span className="line-card__num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{line.title}</h3>
+              <p>{line.text}</p>
+              {line.to ? (
+                <Link className="line-card__cta" to={line.to} viewTransition>
+                  {line.cta} <ArrowRight aria-hidden size={18} />
+                </Link>
+              ) : (
+                <a className="line-card__cta" href={line.href} target="_blank" rel="noopener noreferrer">
+                  {line.cta} <ArrowRight aria-hidden size={18} />
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="page available" aria-labelledby="available-title">
+        <div className="section-head">
+          <h2 id="available-title">Disponibles ahora.</h2>
+          <Link className="text-link" to={`/catalogo?${param.available}=1`} viewTransition>
+            Ver todo el catálogo <ChevronRight aria-hidden size={18} />
+          </Link>
+        </div>
+        <CatalogGate state={state} retry={retry} loading={<GridSkeleton />}>
+          {(c) => <ProductGrid products={availableOf(c)} />}
         </CatalogGate>
       </section>
 
-      {catalog && <FinderSection catalog={catalog} />}
+      <section className="steps reveal" aria-labelledby="steps-title">
+        <div className="page">
+          <h2 id="steps-title" className="steps__title">Comprar es así de simple.</h2>
+          <ol className="steps__list">
+            {steps.map((step, i) => (
+              <li key={step.title}>
+                <span className="steps__num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </li>
+            ))}
+          </ol>
+          <div className="steps__actions">
+            <Link className="button" to="/catalogo" viewTransition>Ver catálogo</Link>
+            <InquiryActions />
+          </div>
+        </div>
+      </section>
+
+      <section className="page tips reveal" aria-labelledby="tips-title">
+        <div className="section-head">
+          <h2 id="tips-title">Sacale el jugo a tu iPhone.</h2>
+          <p>Lo mismo que compartimos en Instagram, siempre a mano.</p>
+        </div>
+        <ul className="tips__grid">
+          {tips.map((tip) => (
+            <li key={tip.title}>
+              <a className="tip-card" href={store.instagramUrl} target="_blank" rel="noopener noreferrer">
+                <span className="tip-card__tag">{tip.tag}</span>
+                <span className="tip-card__title">{tip.title}</span>
+                <span className="tip-card__cta">
+                  Ver en @{store.instagramHandle} <ArrowRight aria-hidden size={16} />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <Visit />
-
-      <Messages />
     </div>
   )
 }
 
-/** The newest unit in stock. Falls back to the first one when dates are missing. */
-function Featured({ catalog }: { catalog: Catalog }) {
-  const available = availableOf(catalog)
+/** Noir-style glowing stage under the hero: the newest unit in stock, or a drawn phone while the catalog loads. */
+function Showcase({ catalog }: { catalog?: Catalog }) {
+  const available = catalog ? availableOf(catalog) : []
   const unit = [...available].sort((a, b) => (b.addedAt ?? 0) - (a.addedAt ?? 0))[0]
-  if (!unit) return null
-  const details = [variantSummary(unit), unit.condition && conditionLabel[unit.condition]].filter(Boolean).join(' · ')
 
-  return (
-    <Link className="featured" to={productUrl(unit)} viewTransition>
-      <p className="featured__tag">Último ingreso</p>
-      {unit.images[0] && <ProductImage src={unit.images[0]} alt={unit.name} priority className="featured__photo" />}
-      <p className="featured__name">{unit.name}</p>
-      {details && <p className="featured__meta">{details}</p>}
-      <div className="featured__foot">
-        <span className="featured__price">{unit.price ? formatPrice(unit.price) : 'Consultar precio'}</span>
-        <span className="featured__cta">
-          Ver equipo <ChevronRight aria-hidden size={18} />
-        </span>
+  if (!unit?.images[0]) {
+    return (
+      <div className="showcase" aria-hidden>
+        <div className="showcase__stage">
+          <div className="phone">
+            <div className="phone__cams"><i /><i /><i /></div>
+          </div>
+        </div>
       </div>
+    )
+  }
+
+  const details = [variantSummary(unit), unit.condition && conditionLabel[unit.condition]].filter(Boolean).join(' · ')
+  return (
+    <Link className="showcase" to={productUrl(unit)} viewTransition>
+      <div className="showcase__stage">
+        <ProductImage src={unit.images[0]} alt={unit.name} priority className="showcase__photo" />
+      </div>
+      <p className="showcase__tag">Último ingreso</p>
+      <p className="showcase__name">{unit.name}</p>
+      <p className="showcase__meta">
+        {[details, unit.price ? formatPrice(unit.price) : 'Consultar precio'].filter(Boolean).join(' — ')}
+      </p>
     </Link>
+  )
+}
+
+function ProductGrid({ products }: { products: Product[] }) {
+  if (products.length === 0) {
+    return (
+      <div className="available__empty">
+        <p>Ahora no hay productos publicados. Escribinos y te contamos qué está por entrar.</p>
+        <InquiryActions />
+      </div>
+    )
+  }
+  return (
+    <ul className="available__grid">
+      {products.slice(0, GRID_SIZE).map((product, i) => (
+        <li key={product.id} style={{ '--i': i } as CSSProperties}>
+          <ProductCard product={product} priority={i < 4} />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function GridSkeleton() {
+  return (
+    <ul className="available__grid" aria-hidden>
+      {Array.from({ length: 4 }, (_, i) => (
+        <li key={i}>
+          <div className="skeleton skeleton--card" />
+        </li>
+      ))}
+    </ul>
   )
 }
 
@@ -98,11 +218,8 @@ function Visit() {
   return (
     <section className="visit reveal" aria-labelledby="visit-title">
       <div className="page visit__inner">
-        <div className="visit__map">
-          <iframe src={store.mapsEmbedUrl} title={`Mapa: ${store.address}, ${store.city}`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-        </div>
         <div className="visit__copy">
-          <h2 id="visit-title">Dónde estamos</h2>
+          <h2 id="visit-title">Te esperamos en el local.</h2>
           <address>
             <span className="visit__address">{store.address}</span>
             <span className="visit__city">{store.city}</span>
@@ -112,108 +229,14 @@ function Visit() {
               ? store.hours
               : 'Antes de venir, escribinos: te confirmamos el horario y que el equipo que querés siga disponible.'}
           </p>
-          <Link className="text-link" to="/contacto" viewTransition>
+          <Link className="button button--outline" to="/contacto" viewTransition>
             Cómo llegar y horarios
-            <ChevronRight aria-hidden size={18} />
           </Link>
         </div>
-      </div>
-    </section>
-  )
-}
-
-/** Three quick questions that narrow the stock live: the store clerk's "¿qué estás buscando?". */
-function FinderSection({ catalog }: { catalog: Catalog }) {
-  const available = availableOf(catalog)
-  if (available.length < 3) return null
-  return (
-    <section className="page finder-section reveal" aria-labelledby="finder-title">
-      <h2 id="finder-title">Buscá por estado y presupuesto</h2>
-      <Finder products={available} />
-    </section>
-  )
-}
-
-/** Closing band for models that are not published. */
-function Messages() {
-  return (
-    <section className="page messages reveal" aria-labelledby="messages-title">
-      <div>
-        <h2 id="messages-title">¿No encontrás el modelo que buscás?</h2>
-        <p>Escribinos por Instagram a @{store.instagramHandle} y te contamos qué tenemos.</p>
-      </div>
-      <a className="button" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
-        <InstagramIcon aria-hidden size={18} />
-        Enviar mensaje
-      </a>
-    </section>
-  )
-}
-
-/** Horizontal, swipeable shelf of products, with paddles on pointer devices. */
-function Shelf({ products: available }: { products: Product[] }) {
-  const trackRef = useRef<HTMLUListElement>(null)
-  const [edges, setEdges] = useState({ start: true, end: false })
-
-  const updateEdges = (el: HTMLUListElement) =>
-    setEdges({ start: el.scrollLeft < 8, end: el.scrollLeft + el.clientWidth > el.scrollWidth - 8 })
-
-  // Paddles start disabled when everything already fits on screen.
-  useEffect(() => {
-    if (trackRef.current) updateEdges(trackRef.current)
-  }, [available.length])
-
-  if (available.length === 0) {
-    return (
-      <div className="page shelf__empty">
-        <p>Ahora no hay productos publicados. Escribinos y te contamos qué está por entrar.</p>
-        <InquiryActions />
-      </div>
-    )
-  }
-
-  const page = (direction: 1 | -1) => {
-    const el = trackRef.current
-    if (!el) return
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    el.scrollBy({ left: direction * el.clientWidth * 0.8, behavior: reduce ? 'auto' : 'smooth' })
-  }
-
-  return (
-    <>
-      <ul ref={trackRef} className="shelf__track" onScroll={(e) => updateEdges(e.currentTarget)}>
-        {available.slice(0, SHELF_SIZE).map((product, i) => (
-          <li key={product.id} style={{ '--i': i } as CSSProperties}>
-            <ProductCard product={product} priority={i < 3} />
-          </li>
-        ))}
-      </ul>
-      <div className="page shelf__foot">
-        <Link className="text-link" to={`/catalogo?${param.available}=1`} viewTransition>
-          Ver los {available.length} productos disponibles
-          <ChevronRight aria-hidden size={18} />
-        </Link>
-        <div className="shelf__paddles">
-          <button type="button" aria-label="Anteriores" disabled={edges.start} onClick={() => page(-1)}>
-            <ChevronLeft aria-hidden size={22} />
-          </button>
-          <button type="button" aria-label="Siguientes" disabled={edges.end} onClick={() => page(1)}>
-            <ChevronRight aria-hidden size={22} />
-          </button>
+        <div className="visit__map">
+          <iframe src={store.mapsEmbedUrl} title={`Mapa: ${store.address}, ${store.city}`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
         </div>
       </div>
-    </>
-  )
-}
-
-function ShelfSkeleton() {
-  return (
-    <ul className="shelf__track" aria-hidden>
-      {Array.from({ length: 4 }, (_, i) => (
-        <li key={i}>
-          <div className="skeleton skeleton--card" />
-        </li>
-      ))}
-    </ul>
+    </section>
   )
 }

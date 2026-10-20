@@ -43,7 +43,7 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 400;
   line-height: var(--lh-snug);
   letter-spacing: var(--track-display);
   text-wrap: balance;
@@ -109,7 +109,7 @@ select {
   top: var(--s-2);
 }
 
-/* Buttons: Apple pills. Solid white for the main action, outline for the alternative. */
+/* Buttons: pills. Solid orange for the main action, outline for the alternative. */
 .button {
   display: inline-flex;
   align-items: center;
@@ -117,12 +117,12 @@ select {
   gap: var(--s-2);
   min-height: 2.75rem;
   padding: 0 1.375rem;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--accent);
   border-radius: var(--r-pill);
-  background: var(--ink);
-  color: var(--on-ink);
+  background: var(--accent);
+  color: var(--on-accent);
   font-size: var(--t-base);
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
@@ -134,8 +134,8 @@ select {
 }
 
 .button:hover {
-  background: #ffffff;
-  border-color: #ffffff;
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
 }
 
 .button--outline {
@@ -164,7 +164,7 @@ select {
   flex: none;
 }
 
-/* Apple-style text link with a trailing chevron icon */
+/* Text link with a trailing chevron icon */
 .text-link {
   display: inline-flex;
   align-items: center;

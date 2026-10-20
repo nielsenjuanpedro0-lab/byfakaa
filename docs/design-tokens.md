@@ -2,26 +2,28 @@
 
 Source of truth: `src/styles/tokens.css` (values) and `src/styles/motion.css` (all animation). This file explains the choices.
 
-## Direction: dark, black and white, Apple-style
+## Direction: "Vitrina" layout, "Noir" look
 
-Set by the owner after the first version. The site borrows the Apple Store's language (black canvas, San Francisco type, dark product tiles, white pill buttons, two-tone section headings, a category icon strip, a swipeable product shelf) so a store that sells Apple products feels native to its customers. It is still By Faka's own site: no Apple logos or imagery, and a trademark notice in the footer.
+Chosen by the owner from five landing proposals: the structure of proposal 01 "Vitrina" (centered hero, the four ways to buy, stock grid, three steps, Instagram tips, the store) with the aesthetic of proposal 02 "Noir" (near-black canvas, light geometric display type, wide-tracked uppercase wordmark, one orange accent, hairlines, a glowing product stage). No Apple logos or imagery, and a trademark notice in the footer.
 
 ## Color
 
 | Token | Hex | Use |
 |---|---|---|
-| `--bg` | `#000000` | Page. |
-| `--surface` | `#161617` | Footer, sheets. |
-| `--card` | `#1d1d1f` | Product tiles, image wells, inputs (Apple's dark gray). |
-| `--card-raised` | `#2a2a2d` | Quiet buttons, paddles, chips. |
-| `--ink` | `#f5f5f7` | Text and the solid pill button. |
-| `--ink-soft` | `#a1a1a6` | Secondary text (8.3:1 on black). |
-| `--ink-faint` | `#86868b` | Tertiary text, second half of two-tone headings (5.8:1). |
-| `--ok` / `--warn` / `--muted` | `#30d158` / `#ff9f0a` / `#6e6e73` | Stock dots only. The only hue on the site, because it carries information. |
+| `--bg` | `#0b0b0b` | Page. |
+| `--surface` | `#121212` | Footer, the steps band. |
+| `--card` | `#161616` | Product tiles, line and tip cards, inputs. |
+| `--card-raised` | `#222222` | Quiet buttons, chips. |
+| `--accent` / `--accent-strong` | `#f08a3c` / `#ff9b4f` | Primary pill buttons, numbering, second hero line, hover borders. |
+| `--accent-glow` | `rgb(240 138 60 / 0.35)` | The showcase stage glow. |
+| `--ink` | `#f5f5f7` | Text. |
+| `--ink-soft` | `#a1a1a6` | Secondary text. |
+| `--ink-faint` | `#86868b` | Tertiary text. |
+| `--ok` / `--warn` / `--muted` | `#30d158` / `#ff9f0a` / `#6e6e73` | Stock dots. |
 
 ## Type
 
-`-apple-system` first, so Apple devices render **San Francisco** (Display for headings, Text for body). Everywhere else **Inter** (self-hosted) stands in. Body is 17px, Apple's size. Headlines are semibold with tight tracking (−0.025 to −0.035em). The hero carries a white-to-silver gradient per word.
+**Montserrat** (variable, self-hosted) for display, mostly at weight 300–400; **Inter** for text. The wordmark and small labels are uppercase with wide tracking (`--track-wide`, 0.32em). Body is 17px.
 
 ## Shape and space
 
@@ -31,7 +33,7 @@ Set by the owner after the first version. The site borrows the Apple Store's lan
 
 ## Layout
 
-- **Home:** centered hero → category strip (only categories the API returns) → "Disponible ahora. Lo que tenemos en stock." shelf that bleeds to the screen edge but aligns with the content → centered store address set at headline size.
+- **Home:** centered hero with stock pill and the newest unit on a glowing stage → "Elegí cómo lo querés" (Sellados, Like New, Usados seleccionados, Android) → "Disponibles ahora" grid of up to 8 units → "Comprar es así de simple" steps → Instagram tips → "Te esperamos en el local" with the map.
 - **Catalog:** sticky filter sidebar on desktop, bottom sheet on mobile, grid/list segmented control.
 - **Product:** sticky gallery with zoom, specs as hairline rows, full-width white "Consultar" pill, translucent sticky purchase bar on mobile.
 - Breakpoints: `<640px` two-column grid; `<900px` touch layout with bottom tab bar; `≥1100px` four columns.

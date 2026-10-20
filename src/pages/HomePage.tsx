@@ -1,21 +1,28 @@
-import { ChevronLeft, ChevronRight, Headphones, Package, Plug, RefreshCcw, Smartphone, Tablet, Watch, Laptop, type LucideIcon } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Fragment, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router'
-import { StoreInfo } from '../components/StoreInfo'
+import { InstagramIcon } from '../components/InstagramIcon'
+import { store } from '../config/store'
 import { CatalogGate } from '../features/products/components/CatalogGate'
+import { Finder } from '../features/products/components/Finder'
 import { InquiryActions } from '../features/products/components/InquiryActions'
 import { ProductCard } from '../features/products/components/ProductCard'
-import { conditionSlug, facetOptions, param } from '../features/products/filters'
-import { conditionLabelPlural } from '../features/products/format'
-import type { Catalog, Condition } from '../features/products/types'
+import { ProductImage } from '../features/products/components/ProductImage'
+import { param } from '../features/products/filters'
+import { conditionLabel, formatPrice, variantSummary } from '../features/products/format'
+import { fromPrice } from '../features/products/summary'
+import type { Catalog, Product } from '../features/products/types'
 import { useCatalog } from '../features/products/useCatalog'
 import { useTitle } from '../lib/useTitle'
 
 const SHELF_SIZE = 10
-const HEADLINE = 'iPhone nuevos y usados.'
+const HEADLINE = 'Tu próximo iPhone, en Mar del Plata.'
 
 // The intro sequence plays once per page load; coming back to Home later shouldn't replay it.
 let introPlayed = false
+
+const availableOf = (catalog: Catalog) => catalog.products.filter((p) => p.availability !== 'out_of_stock')
+const productUrl = (p: Product) => `/producto/${encodeURIComponent(p.id)}`
 
 export function HomePage() {
   useTitle()
@@ -24,29 +31,33 @@ export function HomePage() {
   useEffect(() => {
     introPlayed = true
   }, [])
+  const catalog = state.status === 'success' ? state.catalog : undefined
 
   return (
     <div className={intro ? 'is-intro' : undefined}>
       <section className="page hero" aria-labelledby="hero-title">
-        <p className="hero__eyebrow">By Faka, Mar del Plata</p>
-        <h1 id="hero-title">
-          {HEADLINE.split(' ').map((word, i) => (
-            <Fragment key={i}>
-              {i > 0 && ' '}
-              <span className="hero__word">
-                <span style={{ '--i': i } as CSSProperties}>{word}</span>
-              </span>
-            </Fragment>
-          ))}
-        </h1>
-        <p className="hero__sub">Mirá el stock, consultanos por mensaje y pasá a verlo por Av. Independencia 1273.</p>
-        <div className="hero__actions">
-          <Link className="button" to="/catalogo" viewTransition>Ver el catálogo</Link>
-          <InquiryActions variant="link" />
+        <div className="hero__copy">
+          {catalog ? <StockPill catalog={catalog} /> : <p className="hero__eyebrow">By Faka, Mar del Plata</p>}
+          <h1 id="hero-title">
+            {HEADLINE.split(' ').map((word, i) => (
+              <Fragment key={i}>
+                {i > 0 && ' '}
+                <span className="hero__word">
+                  <span style={{ '--i': i } as CSSProperties}>{word}</span>
+                </span>
+              </Fragment>
+            ))}
+          </h1>
+          <p className="hero__sub">
+            iPhone nuevos y usados, con stock real y precio publicado. Lo elegís acá, lo ves en {store.address}.
+          </p>
+          <div className="hero__actions">
+            <Link className="button" to="/catalogo" viewTransition>Ver el catálogo</Link>
+            <InquiryActions variant="link" />
+          </div>
         </div>
+        {catalog && <Featured catalog={catalog} />}
       </section>
-
-      {state.status === 'success' && <Chapters catalog={state.catalog} />}
 
       <section className="shelf" aria-labelledby="shelf-title">
         <div className="page shelf__head">
@@ -55,70 +66,140 @@ export function HomePage() {
           </h2>
         </div>
         <CatalogGate state={state} retry={retry} loading={<ShelfSkeleton />}>
-          {(catalog) => <Shelf catalog={catalog} />}
+          {(c) => <Shelf products={availableOf(c)} />}
         </CatalogGate>
       </section>
 
-      <section className="page home-store reveal" id="local">
-        <StoreInfo />
-      </section>
+      {catalog && <FinderSection catalog={catalog} />}
+
+      <Visit />
+
+      <Messages />
     </div>
   )
 }
 
-const categoryIcons: [RegExp, LucideIcon][] = [
-  [/iphone/i, Smartphone],
-  [/airpods|auricular/i, Headphones],
-  [/ipad/i, Tablet],
-  [/watch|reloj/i, Watch],
-  [/mac/i, Laptop],
-  [/accesorio|cargador|cable|funda/i, Plug],
-]
-const conditionIcons: Record<Condition, LucideIcon> = { new: Package, used: RefreshCcw }
-
-/** Apple-Store-style icon strip. Entries come from the data: only conditions and categories the catalog has. */
-function Chapters({ catalog }: { catalog: Catalog }) {
-  const items = [
-    ...facetOptions(catalog.products, 'condition').map((o) => {
-      const condition = o.value as Condition
-      return {
-        label: conditionLabelPlural[condition],
-        to: `/catalogo?${param.condition}=${conditionSlug[condition]}`,
-        count: o.count,
-        Icon: conditionIcons[condition],
-      }
-    }),
-    ...facetOptions(catalog.products, 'category').map((o) => ({
-      label: o.value,
-      to: `/catalogo?${param.category}=${encodeURIComponent(o.value)}`,
-      count: o.count,
-      Icon: categoryIcons.find(([re]) => re.test(o.value))?.[1] ?? Package,
-    })),
-  ]
-  if (items.length < 2) return null
-
+/** Live line from the inventory above the headline: one fact, one tap to the catalog. */
+function StockPill({ catalog }: { catalog: Catalog }) {
+  const available = availableOf(catalog)
+  if (available.length === 0) return <p className="hero__eyebrow">By Faka, Mar del Plata</p>
+  const from = fromPrice(available)
   return (
-    <nav className="chapters" aria-label="Explorar por categoría">
-      <ul className="chapters__list">
-        {items.map(({ label, to, count, Icon }, i) => (
-          <li key={to} style={{ '--i': i } as CSSProperties}>
-            <Link to={to} viewTransition>
-              <Icon aria-hidden size={36} strokeWidth={1.25} />
-              <span className="chapters__label">{label}</span>
-              <span className="chapters__count">{count === 1 ? '1 producto' : `${count} productos`}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <Link className="hero__pill" to={`/catalogo?${param.available}=1`} viewTransition>
+      <span className="hero__pill-dot" aria-hidden />
+      {available.length === 1 ? '1 equipo disponible hoy' : `${available.length} equipos disponibles hoy`}
+      {from && <span className="hero__pill-from">desde {formatPrice(from)}</span>}
+      <ChevronRight aria-hidden size={16} />
+    </Link>
   )
 }
 
-/** Horizontal, swipeable shelf of products in stock, with paddles on pointer devices. */
-function Shelf({ catalog }: { catalog: Catalog }) {
+/** The newest unit in stock, set like a product on a stage. Falls back to the first one when dates are missing. */
+function Featured({ catalog }: { catalog: Catalog }) {
+  const available = availableOf(catalog)
+  const unit = [...available].sort((a, b) => (b.addedAt ?? 0) - (a.addedAt ?? 0))[0]
+  if (!unit) return null
+  const variant = variantSummary(unit)
+
+  return (
+    <Link className="featured" to={productUrl(unit)} viewTransition aria-label={`Último ingreso: ${unit.name}`}>
+      <span className="featured__tag">Último ingreso</span>
+      <div className="featured__stage">
+        {unit.images[0] ? (
+          <ProductImage src={unit.images[0]} alt={unit.name} priority className="featured__photo" />
+        ) : (
+          // No photo yet: a drawn silhouette instead of a stock image, so nothing pretends to be the real unit.
+          <div className="featured__device" aria-hidden>
+            <span className="featured__island" />
+          </div>
+        )}
+      </div>
+      <div className="featured__info">
+        <p className="featured__name">{unit.name}</p>
+        <p className="featured__meta">
+          {[variant, unit.condition && conditionLabel[unit.condition]].filter(Boolean).join(' · ')}
+        </p>
+        <p className="featured__price">{unit.price ? formatPrice(unit.price) : 'Consultar precio'}</p>
+        <span className="featured__cta">
+          Ver equipo <ArrowUpRight aria-hidden size={18} />
+        </span>
+      </div>
+    </Link>
+  )
+}
+
+/** The store as a place: the real map, next to what you need to know before going. */
+function Visit() {
+  return (
+    <section className="visit reveal" aria-labelledby="visit-title">
+      <div className="page visit__inner">
+        <div className="visit__map">
+          <iframe src={store.mapsEmbedUrl} title={`Mapa: ${store.address}, ${store.city}`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+        </div>
+        <div className="visit__copy">
+          <h2 id="visit-title">Vení a verlo.</h2>
+          <address>
+            <span className="visit__address">{store.address}</span>
+            <span className="visit__city">{store.city}</span>
+          </address>
+          <p>
+            {store.hours
+              ? store.hours
+              : 'Antes de venir, escribinos: te confirmamos el horario y que el equipo que querés siga disponible.'}
+          </p>
+          <Link className="text-link" to="/contacto" viewTransition>
+            Cómo llegar y horarios
+            <ChevronRight aria-hidden size={18} />
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/** Three quick questions that narrow the stock live: the store clerk's "¿qué estás buscando?". */
+function FinderSection({ catalog }: { catalog: Catalog }) {
+  const available = availableOf(catalog)
+  if (available.length < 3) return null
+  return (
+    <section className="page finder-section reveal" aria-labelledby="finder-title">
+      <h2 id="finder-title">
+        Encontrá el tuyo. <span>Contanos qué buscás.</span>
+      </h2>
+      <Finder products={available} />
+    </section>
+  )
+}
+
+/** Closing band: the store lives on Instagram, so the handle itself is the headline. */
+function Messages() {
+  return (
+    <section className="page messages reveal" aria-labelledby="messages-title">
+      <p className="messages__kicker">¿Buscás un modelo que no está publicado?</p>
+      <h2 id="messages-title">
+        <a href={store.instagramUrl} target="_blank" rel="noopener noreferrer">
+          @{store.instagramHandle}
+        </a>
+      </h2>
+      <p className="messages__sub">Escribinos con el modelo que buscás y te respondemos por mensaje.</p>
+      <div className="messages__actions">
+        <a className="button" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
+          <InstagramIcon aria-hidden size={18} />
+          Enviar mensaje
+        </a>
+        <Link className="text-link" to="/nosotros#faq-title" viewTransition>
+          Preguntas frecuentes
+          <ChevronRight aria-hidden size={18} />
+        </Link>
+      </div>
+    </section>
+  )
+}
+
+/** Horizontal, swipeable shelf of products, with paddles on pointer devices. */
+function Shelf({ products: available }: { products: Product[] }) {
   const trackRef = useRef<HTMLUListElement>(null)
   const [edges, setEdges] = useState({ start: true, end: false })
-  const available = catalog.products.filter((p) => p.availability !== 'out_of_stock')
 
   const updateEdges = (el: HTMLUListElement) =>
     setEdges({ start: el.scrollLeft < 8, end: el.scrollLeft + el.clientWidth > el.scrollWidth - 8 })

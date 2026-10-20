@@ -1,5 +1,7 @@
 # Product API integration
 
+> **Connected to Stackr.** `api/catalog.ts` is a server-side proxy (Vercel function `/api/catalog`, and Vite dev middleware): it reads `GET /api/v1/stock` with `STACKR_API_KEY`, keeps only units with `in_catalog: true`, and strips internal fields (imei, notes, cost, supplier, deposit). Stackr rejects browser calls, so the key must stay server-side. Set `VITE_API_BASE_URL=/api`, `VITE_API_PRODUCTS_PATH=catalog` and `STACKR_API_KEY` in the host's environment. The text below is the original generic guide.
+
 The storefront reads products from the existing management software's API. That API's endpoint, response shape and authentication were **not available** when this was built, so the integration is a clean boundary waiting for real details.
 
 ## Data flow

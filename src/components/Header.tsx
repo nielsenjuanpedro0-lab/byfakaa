@@ -13,6 +13,7 @@ export function Header() {
         <nav aria-label="Principal" className="site-nav">
           <NavLink to="/" end viewTransition>Inicio</NavLink>
           <NavLink to="/catalogo" viewTransition>Catálogo</NavLink>
+          <NavLink to="/nosotros" viewTransition>Nosotros</NavLink>
           <NavLink to="/contacto" viewTransition>El local</NavLink>
         </nav>
         <Form action="/catalogo" role="search" className="header-search">

@@ -23,6 +23,7 @@ const upstreamProduct = z.object({
   condition: z.nullish(z.enum(['new', 'used'])),
   storage: z.nullish(text),
   color: z.nullish(text),
+  added_at: z.nullish(text),
 })
 
 type UpstreamProduct = z.infer<typeof upstreamProduct>
@@ -55,6 +56,7 @@ function toProduct(raw: UpstreamProduct): Product {
     condition: raw.condition ?? undefined,
     storage: raw.storage ?? undefined,
     color: raw.color ?? undefined,
+    addedAt: Date.parse(raw.added_at ?? '') || undefined,
   }
 }
 

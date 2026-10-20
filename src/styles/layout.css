@@ -1,4 +1,4 @@
-/* Header, mobile tab bar, footer. Breakpoint: 900px separates touch-first and pointer layouts. */
+/* Header, footer. Breakpoint: 900px separates touch-first and pointer layouts. */
 
 /* Apple-style global nav: thin, translucent, blurred */
 .site-header {
@@ -119,58 +119,138 @@
   display: none;
 }
 
-.tab-bar {
-  display: none;
-}
-
 .site-footer {
   margin-top: var(--s-8);
-  padding-block: var(--s-6);
+  padding-block: var(--s-7) var(--s-6);
   background: var(--surface);
   font-size: var(--t-xs);
   letter-spacing: -0.01em;
   color: var(--ink-faint);
 }
 
-.site-footer__inner {
-  display: grid;
-  gap: var(--s-2);
-}
-
-.site-footer__name {
-  color: var(--ink-soft);
-  font-weight: 600;
-}
-
-.site-footer nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-1) var(--s-5);
-  margin-block: var(--s-2);
-  padding-block: var(--s-3);
-  border-block: 1px solid var(--line);
-}
-
-.site-footer nav a {
+.site-footer a {
   color: var(--ink-soft);
   text-decoration: none;
-  padding-block: var(--s-1);
 }
 
-.site-footer nav a:hover {
+.site-footer a:hover {
   color: var(--ink);
   text-decoration: underline;
 }
 
+.site-footer__top {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 1fr);
+  gap: var(--s-6);
+  padding-bottom: var(--s-6);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-footer__brand {
+  display: grid;
+  align-content: start;
+  gap: var(--s-2);
+}
+
+.site-footer__name {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.site-footer address {
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.site-footer__col {
+  display: grid;
+  align-content: start;
+  gap: var(--s-2);
+}
+
+.site-footer__col-title {
+  margin-bottom: var(--s-1);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding-top: var(--s-5);
+}
+
+.site-footer__bottom > div {
+  display: grid;
+  gap: var(--s-1);
+}
+
+/* Res. 424/2020 asks for the withdrawal button to be easy to find: give it a visible pill */
+.site-footer .site-footer__withdraw {
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  color: var(--ink);
+}
+
+.site-footer .site-footer__withdraw:hover {
+  border-color: var(--ink);
+  text-decoration: none;
+}
+
+.site-footer__fiscal img {
+  display: block;
+}
+
 @media (max-width: 899px) {
-  body {
+  .site-footer__top {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+
+  .site-footer__col a {
+    padding-block: var(--s-1);
+  }
+}
+
+@media (max-width: 899px) {
+  /* room for the fixed purchase bar on product pages */
+  body:has(.purchase-bar) {
     padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
   }
 
-  .site-nav,
   .header-search,
   .site-header .site-header__cta {
     display: none;
+  }
+
+  /* No bottom bar: the two destinations stay in the header, thumb-sized */
+  .site-nav {
+    justify-content: flex-end;
+    gap: 0;
+  }
+
+  .site-nav a:first-child {
+    display: none;
+  }
+
+  .wordmark__place {
+    display: none;
+  }
+
+  .site-nav a {
+    padding: var(--s-3) 0.4rem;
+    font-size: var(--t-sm);
+    white-space: nowrap;
   }
 
   .header-search-link {
@@ -178,52 +258,7 @@
     place-items: center;
     width: 2.75rem;
     height: 2.75rem;
-    margin-left: auto;
     margin-right: calc(var(--s-3) * -1);
     color: var(--ink);
-  }
-
-  .tab-bar {
-    position: fixed;
-    inset: auto 0 0;
-    z-index: 20;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    padding-bottom: env(safe-area-inset-bottom);
-    background: var(--nav-bg);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-top: 1px solid var(--line);
-  }
-
-  .tab-bar a {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    height: var(--tabbar-h);
-    font-size: 0.625rem;
-    font-weight: 500;
-    letter-spacing: 0;
-    color: var(--ink-faint);
-    text-decoration: none;
-  }
-
-  .tab-bar a.active {
-    color: var(--ink);
-  }
-
-  /* Morphs between tabs on navigation (view transition) */
-  .tab-bar__indicator {
-    position: absolute;
-    top: -1px;
-    left: 50%;
-    width: 1.75rem;
-    height: 2px;
-    margin-left: -0.875rem;
-    border-radius: 0 0 2px 2px;
-    background: var(--ink);
   }
 }

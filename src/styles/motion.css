@@ -10,16 +10,8 @@
   view-transition-name: site-header;
 }
 
-.tab-bar {
-  view-transition-name: tab-bar;
-}
-
 .purchase-bar {
   view-transition-name: purchase-bar;
-}
-
-.tab-bar__indicator {
-  view-transition-name: tab-indicator;
 }
 
 .product-image {
@@ -49,13 +41,11 @@
     animation: vt-grow-in 420ms var(--ease-out) both;
   }
 
-  ::view-transition-new(purchase-bar):only-child,
-  ::view-transition-new(tab-bar):only-child {
+  ::view-transition-new(purchase-bar):only-child {
     animation: vt-slide-up 460ms var(--ease-out) both;
   }
 
-  ::view-transition-old(purchase-bar):only-child,
-  ::view-transition-old(tab-bar):only-child {
+  ::view-transition-old(purchase-bar):only-child {
     animation: vt-slide-down 200ms var(--ease) both;
   }
 
@@ -169,9 +159,12 @@
     animation: fade-rise 1000ms var(--ease-out) 600ms both;
   }
 
-  .is-intro .chapters__list > li {
-    animation: fade-rise 900ms var(--ease-out) both;
-    animation-delay: calc(720ms + var(--i, 0) * 60ms);
+  .is-intro .hero__pill {
+    animation: fade-rise 900ms var(--ease-out) 40ms both;
+  }
+
+  .is-intro .featured {
+    animation: settle-in 1200ms var(--ease-out) 520ms both;
   }
 
   .is-intro .shelf__track > li {

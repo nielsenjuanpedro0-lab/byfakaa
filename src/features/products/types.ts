@@ -24,6 +24,8 @@ export interface Product {
   condition?: Condition
   storage?: string
   color?: string
+  /** When the unit entered inventory (ms since epoch), when the API says so. */
+  addedAt?: number
 }
 
 export type CatalogSource = 'api' | 'fixture'

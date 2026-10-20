@@ -140,38 +140,6 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* ---------- Home intro: one orchestrated sequence on the first visit of the session ---------- */
-
-  .is-intro .hero__eyebrow {
-    animation: fade-rise 900ms var(--ease-out) 40ms both;
-  }
-
-  .is-intro .hero__word > span {
-    animation: word-rise 1100ms var(--ease-out) both;
-    animation-delay: calc(var(--i) * 80ms + 120ms);
-  }
-
-  .is-intro .hero__sub {
-    animation: fade-rise 1000ms var(--ease-out) 480ms both;
-  }
-
-  .is-intro .hero__actions {
-    animation: fade-rise 1000ms var(--ease-out) 600ms both;
-  }
-
-  .is-intro .hero__pill {
-    animation: fade-rise 900ms var(--ease-out) 40ms both;
-  }
-
-  .is-intro .featured {
-    animation: settle-in 1200ms var(--ease-out) 520ms both;
-  }
-
-  .is-intro .shelf__track > li {
-    animation: settle-in 1100ms var(--ease-out) both;
-    animation-delay: calc(820ms + min(var(--i, 0), 5) * 80ms);
-  }
-
   /* ---------- Product detail entrance ---------- */
 
   .detail__info > * {

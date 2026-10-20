@@ -46,8 +46,8 @@ export function Finder({ products }: Props) {
     <div className="finder">
       <div className="finder__questions">
         {conditions.length > 1 && (
-          <Question label="¿Nuevo o usado?">
-            <Choice active={!condition} onClick={() => setCondition(null)}>Me da igual</Choice>
+          <Question label="Estado">
+            <Choice active={!condition} onClick={() => setCondition(null)}>Todos</Choice>
             {conditions.map((c) => (
               <Choice key={c} active={condition === c} onClick={() => setCondition(c)}>
                 {conditionLabel[c]}
@@ -57,8 +57,8 @@ export function Finder({ products }: Props) {
         )}
 
         {storages.length > 1 && (
-          <Question label="¿Cuánto espacio necesitás?">
-            <Choice active={!storage} onClick={() => setStorage(null)}>Me da igual</Choice>
+          <Question label="Capacidad">
+            <Choice active={!storage} onClick={() => setStorage(null)}>Todos</Choice>
             {storages.map((s) => (
               <Choice key={s} active={storage === s} onClick={() => setStorage(s)}>
                 {s}
@@ -70,7 +70,7 @@ export function Finder({ products }: Props) {
         {maxBudget > minBudget && (
           <div className="finder__q">
             <label className="finder__label" htmlFor={sliderId}>
-              ¿Hasta cuánto querés gastar?
+              Presupuesto
             </label>
             <p className="finder__budget" aria-live="polite">
               {limited ? `Hasta ${formatPrice({ amount: budget, currency: 'USD' })}` : 'Sin límite'}
@@ -93,10 +93,10 @@ export function Finder({ products }: Props) {
 
       <div className="finder__answer" aria-live="polite">
         <p className="finder__count">
-          <span>{matches.length}</span> {matches.length === 1 ? 'equipo para vos' : 'equipos para vos'}
+          <span>{matches.length}</span> {matches.length === 1 ? 'resultado' : 'resultados'}
         </p>
         {matches.length === 0 ? (
-          <p className="finder__empty">Nada con esa combinación hoy. Probá aflojar un filtro o escribinos: puede estar por entrar.</p>
+          <p className="finder__empty">No hay equipos con esa combinación. Probá con otro filtro o escribinos.</p>
         ) : (
           <ul className="finder__list">
             {matches.slice(0, PREVIEW).map((p) => (

@@ -68,13 +68,10 @@ export function AboutPage() {
   return (
     <div className="about">
       <section className="page about__intro">
-        <p className="about__eyebrow">Nosotros</p>
-        <h1>
-          iPhone, en Mar del Plata. <span>Con alguien del otro lado que te atiende.</span>
-        </h1>
+        <h1>Sobre By Faka</h1>
         <p className="about__lead">
           By Faka es una tienda de productos Apple en {store.address}. Vendemos iPhone nuevos y usados y accesorios, en el
-          local y por mensaje. Sin intermediarios: hablás con nosotros, ves el equipo y te lo llevás.
+          local y por mensaje. Hablás directamente con nosotros, ves el equipo y te lo llevás.
         </p>
       </section>
 

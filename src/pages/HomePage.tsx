@@ -1,5 +1,5 @@
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
-import { Fragment, useEffect, useRef, useState, type CSSProperties } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router'
 import { InstagramIcon } from '../components/InstagramIcon'
 import { store } from '../config/store'
@@ -10,16 +10,11 @@ import { ProductCard } from '../features/products/components/ProductCard'
 import { ProductImage } from '../features/products/components/ProductImage'
 import { param } from '../features/products/filters'
 import { conditionLabel, formatPrice, variantSummary } from '../features/products/format'
-import { fromPrice } from '../features/products/summary'
 import type { Catalog, Product } from '../features/products/types'
 import { useCatalog } from '../features/products/useCatalog'
 import { useTitle } from '../lib/useTitle'
 
 const SHELF_SIZE = 10
-const HEADLINE = 'Tu próximo iPhone, en Mar del Plata.'
-
-// The intro sequence plays once per page load; coming back to Home later shouldn't replay it.
-let introPlayed = false
 
 const availableOf = (catalog: Catalog) => catalog.products.filter((p) => p.availability !== 'out_of_stock')
 const productUrl = (p: Product) => `/producto/${encodeURIComponent(p.id)}`
@@ -27,43 +22,39 @@ const productUrl = (p: Product) => `/producto/${encodeURIComponent(p.id)}`
 export function HomePage() {
   useTitle()
   const { state, retry } = useCatalog()
-  const [intro] = useState(() => !introPlayed)
-  useEffect(() => {
-    introPlayed = true
-  }, [])
   const catalog = state.status === 'success' ? state.catalog : undefined
+  const inStock = catalog ? availableOf(catalog).length : 0
 
   return (
-    <div className={intro ? 'is-intro' : undefined}>
+    <div>
       <section className="page hero" aria-labelledby="hero-title">
         <div className="hero__copy">
-          {catalog ? <StockPill catalog={catalog} /> : <p className="hero__eyebrow">By Faka, Mar del Plata</p>}
-          <h1 id="hero-title">
-            {HEADLINE.split(' ').map((word, i) => (
-              <Fragment key={i}>
-                {i > 0 && ' '}
-                <span className="hero__word">
-                  <span style={{ '--i': i } as CSSProperties}>{word}</span>
-                </span>
-              </Fragment>
-            ))}
-          </h1>
+          <p className="hero__place">
+            {store.address} · Mar del Plata
+          </p>
+          <h1 id="hero-title">iPhone nuevos y usados</h1>
           <p className="hero__sub">
-            iPhone nuevos y usados, con stock real y precio publicado. Lo elegís acá, lo ves en {store.address}.
+            Mirá qué hay en stock y a qué precio. Consultanos por mensaje y pasá a verlo por el local.
           </p>
           <div className="hero__actions">
-            <Link className="button" to="/catalogo" viewTransition>Ver el catálogo</Link>
-            <InquiryActions variant="link" />
+            <Link className="button" to="/catalogo" viewTransition>Ver catálogo</Link>
+            <a className="button button--outline" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
+              <InstagramIcon aria-hidden size={18} />
+              Escribinos
+            </a>
           </div>
+          {inStock > 0 && (
+            <p className="hero__stock">
+              {inStock === 1 ? '1 equipo en stock' : `${inStock} equipos en stock`}
+            </p>
+          )}
         </div>
         {catalog && <Featured catalog={catalog} />}
       </section>
 
       <section className="shelf" aria-labelledby="shelf-title">
         <div className="page shelf__head">
-          <h2 id="shelf-title">
-            Disponible ahora. <span>Lo que tenemos en stock.</span>
-          </h2>
+          <h2 id="shelf-title">En stock</h2>
         </div>
         <CatalogGate state={state} retry={retry} loading={<ShelfSkeleton />}>
           {(c) => <Shelf products={availableOf(c)} />}
@@ -79,49 +70,23 @@ export function HomePage() {
   )
 }
 
-/** Live line from the inventory above the headline: one fact, one tap to the catalog. */
-function StockPill({ catalog }: { catalog: Catalog }) {
-  const available = availableOf(catalog)
-  if (available.length === 0) return <p className="hero__eyebrow">By Faka, Mar del Plata</p>
-  const from = fromPrice(available)
-  return (
-    <Link className="hero__pill" to={`/catalogo?${param.available}=1`} viewTransition>
-      <span className="hero__pill-dot" aria-hidden />
-      {available.length === 1 ? '1 equipo disponible hoy' : `${available.length} equipos disponibles hoy`}
-      {from && <span className="hero__pill-from">desde {formatPrice(from)}</span>}
-      <ChevronRight aria-hidden size={16} />
-    </Link>
-  )
-}
-
-/** The newest unit in stock, set like a product on a stage. Falls back to the first one when dates are missing. */
+/** The newest unit in stock. Falls back to the first one when dates are missing. */
 function Featured({ catalog }: { catalog: Catalog }) {
   const available = availableOf(catalog)
   const unit = [...available].sort((a, b) => (b.addedAt ?? 0) - (a.addedAt ?? 0))[0]
   if (!unit) return null
-  const variant = variantSummary(unit)
+  const details = [variantSummary(unit), unit.condition && conditionLabel[unit.condition]].filter(Boolean).join(' · ')
 
   return (
-    <Link className="featured" to={productUrl(unit)} viewTransition aria-label={`Último ingreso: ${unit.name}`}>
-      <span className="featured__tag">Último ingreso</span>
-      <div className="featured__stage">
-        {unit.images[0] ? (
-          <ProductImage src={unit.images[0]} alt={unit.name} priority className="featured__photo" />
-        ) : (
-          // No photo yet: a drawn silhouette instead of a stock image, so nothing pretends to be the real unit.
-          <div className="featured__device" aria-hidden>
-            <span className="featured__island" />
-          </div>
-        )}
-      </div>
-      <div className="featured__info">
-        <p className="featured__name">{unit.name}</p>
-        <p className="featured__meta">
-          {[variant, unit.condition && conditionLabel[unit.condition]].filter(Boolean).join(' · ')}
-        </p>
-        <p className="featured__price">{unit.price ? formatPrice(unit.price) : 'Consultar precio'}</p>
+    <Link className="featured" to={productUrl(unit)} viewTransition>
+      <p className="featured__tag">Último ingreso</p>
+      {unit.images[0] && <ProductImage src={unit.images[0]} alt={unit.name} priority className="featured__photo" />}
+      <p className="featured__name">{unit.name}</p>
+      {details && <p className="featured__meta">{details}</p>}
+      <div className="featured__foot">
+        <span className="featured__price">{unit.price ? formatPrice(unit.price) : 'Consultar precio'}</span>
         <span className="featured__cta">
-          Ver equipo <ArrowUpRight aria-hidden size={18} />
+          Ver equipo <ChevronRight aria-hidden size={18} />
         </span>
       </div>
     </Link>
@@ -137,7 +102,7 @@ function Visit() {
           <iframe src={store.mapsEmbedUrl} title={`Mapa: ${store.address}, ${store.city}`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
         </div>
         <div className="visit__copy">
-          <h2 id="visit-title">Vení a verlo.</h2>
+          <h2 id="visit-title">Dónde estamos</h2>
           <address>
             <span className="visit__address">{store.address}</span>
             <span className="visit__city">{store.city}</span>
@@ -163,35 +128,24 @@ function FinderSection({ catalog }: { catalog: Catalog }) {
   if (available.length < 3) return null
   return (
     <section className="page finder-section reveal" aria-labelledby="finder-title">
-      <h2 id="finder-title">
-        Encontrá el tuyo. <span>Contanos qué buscás.</span>
-      </h2>
+      <h2 id="finder-title">Buscá por estado y presupuesto</h2>
       <Finder products={available} />
     </section>
   )
 }
 
-/** Closing band: the store lives on Instagram, so the handle itself is the headline. */
+/** Closing band for models that are not published. */
 function Messages() {
   return (
     <section className="page messages reveal" aria-labelledby="messages-title">
-      <p className="messages__kicker">¿Buscás un modelo que no está publicado?</p>
-      <h2 id="messages-title">
-        <a href={store.instagramUrl} target="_blank" rel="noopener noreferrer">
-          @{store.instagramHandle}
-        </a>
-      </h2>
-      <p className="messages__sub">Escribinos con el modelo que buscás y te respondemos por mensaje.</p>
-      <div className="messages__actions">
-        <a className="button" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
-          <InstagramIcon aria-hidden size={18} />
-          Enviar mensaje
-        </a>
-        <Link className="text-link" to="/nosotros#faq-title" viewTransition>
-          Preguntas frecuentes
-          <ChevronRight aria-hidden size={18} />
-        </Link>
+      <div>
+        <h2 id="messages-title">¿No encontrás el modelo que buscás?</h2>
+        <p>Escribinos por Instagram a @{store.instagramHandle} y te contamos qué tenemos.</p>
       </div>
+      <a className="button" href={store.instagramDmUrl} target="_blank" rel="noopener noreferrer">
+        <InstagramIcon aria-hidden size={18} />
+        Enviar mensaje
+      </a>
     </section>
   )
 }

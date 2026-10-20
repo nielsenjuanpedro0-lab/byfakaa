@@ -14,7 +14,7 @@ export function StoreInfo({ headingLevel = 2 }: { headingLevel?: 1 | 2 | 3 }) {
 
   return (
     <div className="store-info">
-      <Heading className="store-info__heading">Pasá por el local.</Heading>
+      <Heading className="store-info__heading">El local</Heading>
       <address>
         <span className="store-info__street">{store.address}</span>
         <span className="store-info__city">{store.city}</span>

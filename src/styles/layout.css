@@ -396,7 +396,12 @@
   }
 
   .site-nav a {
+    padding-inline: var(--s-3);
     white-space: nowrap;
+  }
+
+  .wordmark__place {
+    display: none;
   }
 }
 

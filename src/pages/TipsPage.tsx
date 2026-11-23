@@ -16,10 +16,10 @@ export function TipsPage() {
   )
 }
 
-/** Cards linking to every tip. Used on this page and on the home page. */
-export function TipCards() {
+/** Cards linking to every tip. `featured` (home page) makes the first one large with the rest stacked beside it. */
+export function TipCards({ featured = false }: { featured?: boolean }) {
   return (
-    <ul className="tips__grid">
+    <ul className={featured ? 'tips__grid tips__grid--featured' : 'tips__grid'}>
       {tips.map((tip) => (
         <li key={tip.slug}>
           <Link className="tip-card" to={`/tips/${tip.slug}`} viewTransition>

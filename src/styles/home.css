@@ -1,91 +1,63 @@
-/* Home: centered hero, the four lines, stock grid, steps, tips, visit band. */
+/*
+ * Home: storefront hero, one-sentence promise, stock grid, the four lines as a bento, the buying steps as type,
+ * featured tips, and the store. Each section uses its own layout family; one accent, one radius scale
+ * (pills for actions, --r-card for surfaces).
+ */
 
-/* Shared section heading: title on the left, short note or link on the right */
-.section-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  justify-content: space-between;
-  gap: var(--s-4) var(--s-7);
-  margin-bottom: var(--s-6);
-}
-
-.section-head h2 {
-  font-size: var(--t-2xl);
-  font-weight: 300;
-  line-height: 1.05;
-}
-
-.section-head p {
-  max-width: 24rem;
-  color: var(--ink-soft);
-}
-
-/* ---------- Hero: centered copy, storefront photo faded behind ---------- */
+/* ---------- Hero: the storefront photo carries it, copy sits on its dark side ---------- */
 .hero {
   position: relative;
   isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: min(100dvh, 54rem);
   overflow: hidden;
-  /* runs up under the floating header, so the storefront photo shows behind the pill */
+  /* runs up under the floating header, so the photo shows behind the pill */
   margin-top: calc(-1 * var(--header-h));
   padding-top: var(--header-h);
 }
 
-.hero__bg {
+.hero__photo {
   position: absolute;
   inset: 0;
   z-index: -2;
   width: 100%;
-  height: min(100%, 52rem);
+  height: 100%;
   object-fit: cover;
-  object-position: 55% 30%;
-  opacity: 0.16;
-  filter: grayscale(0.6) contrast(1.1);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
+  object-position: 72% 38%;
+  filter: saturate(0.8) brightness(0.92);
+  /* the photo dissolves before the hero ends, so no hard edge shows against the page */
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 96%);
 }
 
-/* darkens the photo right behind the copy so the store sign never fights the headline */
+/* left-to-right scrim keeps the copy at AA contrast; the bottom fade hands off to the page */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(ellipse 60% 40% at 50% 28%, rgb(11 11 11 / 0.7), transparent 75%);
+  background:
+    linear-gradient(to top, var(--bg) 0%, transparent 28%),
+    linear-gradient(90deg, rgb(11 11 11 / 0.96) 0%, rgb(11 11 11 / 0.86) 34%, rgb(11 11 11 / 0.3) 64%, rgb(11 11 11 / 0.12) 100%);
   pointer-events: none;
 }
 
 .hero__inner {
   display: flex;
-  flex-direction: column;
+  flex: 1;
   align-items: center;
-  padding-block: var(--s-8) var(--s-7);
-  text-align: center;
+  padding-block: var(--s-7) var(--s-8);
 }
 
-.hero__pill {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-2);
-  margin-bottom: var(--s-5);
-  padding: var(--s-2) var(--s-4);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r-pill);
-  font-size: var(--t-sm);
-  color: var(--ink-soft);
-}
-
-.hero__dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: var(--ok);
+.hero__copy {
+  max-width: 36rem;
 }
 
 .hero h1 {
-  font-size: clamp(2.75rem, 1.2rem + 5.6vw, 5.75rem);
+  font-size: clamp(3rem, 1.5rem + 4.8vw, 5.75rem);
   font-weight: 300;
   line-height: 1.02;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .hero h1 span {
@@ -94,7 +66,7 @@
 }
 
 .hero__sub {
-  max-width: 34rem;
+  max-width: 30rem;
   margin-top: var(--s-5);
   font-size: var(--t-md);
   line-height: 1.45;
@@ -104,43 +76,114 @@
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  align-items: baseline;
+  gap: var(--s-3) var(--s-6);
+  margin-top: var(--s-7);
+}
+
+/* primary action set as type: display face, orange rule underneath, the arrow leads on hover */
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
   gap: var(--s-3);
-  margin-top: var(--s-6);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--accent);
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
 }
 
-/* ---------- Promises: what every purchase includes ---------- */
-.promises__list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--s-4);
-  padding-block: var(--s-6);
-  border-top: 1px solid var(--line);
+.hero__cta svg {
+  color: var(--accent);
+  transition: transform 400ms var(--ease-out);
 }
 
-.promises__list li {
-  display: flex;
-  gap: var(--s-3);
-  align-items: flex-start;
-}
-
-.promises__list svg {
-  flex: none;
-  margin-top: 0.1rem;
+.hero__cta:hover {
   color: var(--accent);
 }
 
-.promises__list p {
-  display: grid;
-  gap: 0.15rem;
-  font-size: var(--t-sm);
+.hero__cta:hover svg {
+  transform: translateX(6px);
 }
 
-.promises__list span {
+.hero__alt {
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 0.3em;
+  transition: color var(--dur) var(--ease), text-decoration-color var(--dur) var(--ease);
+}
+
+.hero__alt:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
+}
+
+/* ---------- Promise: what every purchase includes, set as one sentence ---------- */
+.promise {
+  padding-block: var(--s-7);
+  border-bottom: 1px solid var(--line);
+}
+
+.promise p {
+  max-width: 52rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 1rem + 1.3vw, 2.125rem);
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ink-faint);
+  text-wrap: pretty;
+}
+
+.promise strong {
+  font-weight: 400;
+  color: var(--ink);
+}
+
+/* ---------- Available: stock grid ---------- */
+.available {
+  padding-block: var(--s-8);
+}
+
+.available__head,
+.tips__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3) var(--s-6);
+  margin-bottom: var(--s-5);
+}
+
+.available h2,
+.lines h2,
+.tips h2,
+.visit h2 {
+  font-size: var(--t-2xl);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.available__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s-4);
+}
+
+.available__empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--s-4);
   color: var(--ink-soft);
 }
 
-/* ---------- Category chips above the stock grid ---------- */
 .categories {
   display: flex;
   flex-wrap: wrap;
@@ -158,7 +201,7 @@
   border-radius: var(--r-pill);
   font-size: var(--t-sm);
   text-decoration: none;
-  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
 }
 
 .categories__chip span {
@@ -168,56 +211,62 @@
 
 .categories__chip:hover {
   border-color: var(--accent);
+  background: rgb(240 138 60 / 0.08);
 }
 
-/* ---------- Lines: four cards with orange numbering ---------- */
+/* ---------- Lines: a bento, one tile per way to buy ---------- */
 .lines {
   padding-block: var(--s-8);
   border-top: 1px solid var(--line);
 }
 
-.lines__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--s-4);
+.lines__lead {
+  max-width: 34rem;
+  margin-top: var(--s-3);
+  color: var(--ink-soft);
 }
 
-.line-card {
+.lines__bento {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr;
+  grid-template-areas:
+    'sealed used used'
+    'sealed likenew android';
+  gap: var(--s-4);
+  margin-top: var(--s-6);
+}
+
+.line-tile {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 15rem;
-  padding: var(--s-5);
+  min-height: 13rem;
+  padding: var(--s-6);
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--r-card);
   background: var(--card);
   transition: border-color var(--dur) var(--ease);
 }
 
-.line-card:hover {
-  border-color: var(--accent);
+.line-tile:hover {
+  border-color: rgb(240 138 60 / 0.6);
 }
 
-.line-card__num {
-  font-size: var(--t-sm);
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-
-.line-card h3 {
-  margin-top: var(--s-4);
-  font-size: var(--t-lg);
-  font-weight: 400;
+.line-tile h3 {
+  font-size: var(--t-xl);
+  font-weight: 300;
   line-height: 1.1;
 }
 
-.line-card p {
+.line-tile p {
+  max-width: 28ch;
   margin-top: var(--s-2);
   font-size: var(--t-sm);
   color: var(--ink-soft);
 }
 
-.line-card__cta {
+.line-tile__cta {
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
@@ -227,84 +276,75 @@
   text-decoration: none;
 }
 
-/* the whole card is the tap target */
-.line-card__cta::after {
+/* the whole tile is the tap target */
+.line-tile__cta::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
 }
 
-/* ---------- Available: stock grid ---------- */
-.available {
-  padding-block: var(--s-8);
-  border-top: 1px solid var(--line);
+.line-tile--sealed {
+  grid-area: sealed;
+  min-height: 27rem;
+  background:
+    radial-gradient(110% 70% at 100% 100%, rgb(240 138 60 / 0.34), transparent 62%),
+    radial-gradient(70% 50% at 0% 0%, rgb(255 255 255 / 0.05), transparent 70%),
+    #141110;
 }
 
-.available__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--s-4);
+.line-tile--sealed h3 {
+  font-size: var(--t-2xl);
 }
 
-.available__empty {
-  display: grid;
-  justify-items: start;
-  gap: var(--s-4);
-  color: var(--ink-soft);
+.line-tile--used {
+  grid-area: used;
+  background:
+    linear-gradient(90deg, rgb(20 20 20 / 0.97) 30%, rgb(20 20 20 / 0.72) 100%),
+    url('/brand/local-frente.webp') 70% 40% / cover;
 }
 
-/* ---------- Steps ---------- */
+.line-tile--likenew {
+  grid-area: likenew;
+}
+
+.line-tile--android {
+  grid-area: android;
+  background: var(--surface);
+}
+
+/* ---------- Steps: three verbs set as type, no cards ---------- */
 .steps {
   padding-block: var(--s-8);
+  border-block: 1px solid var(--line);
   background: var(--surface);
-  text-align: center;
-}
-
-.steps__title {
-  font-size: var(--t-2xl);
-  font-weight: 300;
 }
 
 .steps__list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--s-4);
-  margin-top: var(--s-7);
-  text-align: left;
+  gap: var(--s-6);
 }
 
-.steps__list li {
-  padding-top: var(--s-5);
-  border-top: 1px solid var(--line-strong);
+.steps__verb {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1.4rem + 2.6vw, 3.75rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-.steps__num {
-  font-size: var(--t-sm);
+.steps__list li:last-child .steps__verb {
   color: var(--accent);
 }
 
-.steps__list h3 {
+.steps__text {
+  max-width: 26ch;
   margin-top: var(--s-3);
-  font-size: var(--t-md);
-  font-weight: 400;
-}
-
-.steps__list p {
-  margin-top: var(--s-2);
-  font-size: var(--t-sm);
   color: var(--ink-soft);
 }
 
-.steps__actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--s-3);
-  margin-top: var(--s-7);
-}
-
-/* ---------- Tips from Instagram ---------- */
+/* ---------- Tips ---------- */
 .tips {
   padding-block: var(--s-8);
 }
@@ -315,21 +355,40 @@
   gap: var(--s-4);
 }
 
+/* home: the first tip large, the other two stacked beside it */
+.tips__grid--featured {
+  grid-template-columns: 1.35fr 1fr;
+}
+
+.tips__grid--featured > li:first-child {
+  grid-row: span 2;
+}
+
 .tip-card {
   display: flex;
   flex-direction: column;
-  min-height: 15rem;
+  height: 100%;
+  min-height: 12rem;
   padding: var(--s-6);
   border: 1px solid var(--line);
   border-radius: var(--r-card);
-  background: radial-gradient(circle at 100% 0%, rgb(240 138 60 / 0.14), transparent 55%), var(--card);
+  background: var(--card);
   color: var(--ink);
   text-decoration: none;
   transition: border-color var(--dur) var(--ease);
 }
 
 .tip-card:hover {
-  border-color: var(--accent);
+  border-color: rgb(240 138 60 / 0.6);
+}
+
+.tips__grid--featured > li:first-child .tip-card {
+  min-height: 24rem;
+  background: radial-gradient(90% 60% at 100% 0%, rgb(240 138 60 / 0.2), transparent 60%), var(--card);
+}
+
+.tips__grid--featured > li:first-child .tip-card__title {
+  font-size: var(--t-2xl);
 }
 
 .tip-card__tag {
@@ -341,13 +400,15 @@
 
 .tip-card__title {
   margin-top: auto;
+  padding-top: var(--s-5);
   font-family: var(--font-display);
-  font-size: var(--t-xl);
+  font-size: var(--t-lg);
   font-weight: 300;
   line-height: 1.1;
 }
 
 .tip-card__summary {
+  max-width: 40ch;
   margin-top: var(--s-3);
   font-size: var(--t-sm);
   color: var(--ink-soft);
@@ -362,7 +423,11 @@
   color: var(--ink-soft);
 }
 
-/* ---------- Visit: address + real map ---------- */
+.tip-card:hover .tip-card__cta {
+  color: var(--ink);
+}
+
+/* ---------- Visit: a second storefront angle beside the address ---------- */
 .visit {
   padding-block: var(--s-8);
   border-top: 1px solid var(--line);
@@ -370,37 +435,17 @@
 
 .visit__inner {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
+  grid-template-columns: 0.85fr 1.15fr;
   align-items: center;
   gap: var(--s-8);
 }
 
-.visit__map {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: var(--card);
-}
-
-/* Google's light tiles, inverted into a dark map that matches the site */
-.visit__map iframe,
-.contact__map-frame {
-  filter: invert(0.9) hue-rotate(180deg) saturate(0.6) contrast(0.95);
-}
-
-.visit__map iframe {
-  display: block;
+.visit__photo {
   width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.visit__copy h2 {
-  font-size: var(--t-2xl);
-  font-weight: 300;
-  line-height: 1.05;
+  aspect-ratio: 3 / 4;
+  max-height: 38rem;
+  object-fit: cover;
+  border-radius: var(--r-card);
 }
 
 .visit__copy address {
@@ -411,7 +456,7 @@
 
 .visit__address {
   font-family: var(--font-display);
-  font-size: var(--t-lg);
+  font-size: var(--t-xl);
   font-weight: 400;
   color: var(--accent);
 }
@@ -422,105 +467,15 @@
 }
 
 .visit__copy p {
-  max-width: 26rem;
-  margin-block: var(--s-5);
+  max-width: 28rem;
+  margin-block: var(--s-5) var(--s-6);
   color: var(--ink-soft);
 }
 
-/* ---------- Touch-first ---------- */
-@media (max-width: 1099px) {
-  .promises__list,
-  .lines__grid,
-  .available__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 899px) {
-  .hero__inner {
-    padding-block: var(--s-7) var(--s-6);
-  }
-
-  .hero__bg {
-    object-position: 60% 30%;
-    opacity: 0.18;
-  }
-
-  .hero__sub {
-    font-size: var(--t-base);
-  }
-
-
-  .lines,
-  .available,
-  .steps,
-  .tips,
-  .visit {
-    padding-block: var(--s-7);
-  }
-
-  .steps__list,
-  .tips__grid,
-  .visit__inner {
-    grid-template-columns: 1fr;
-  }
-
-  .visit__inner {
-    gap: var(--s-6);
-  }
-}
-
-@media (max-width: 639px) {
-  .lines__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .line-card,
-  .tip-card {
-    min-height: 0;
-  }
-}
-
-/* ---------- Motion: transform and opacity only, off for reduced motion ---------- */
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  /* hero copy enters once, staggered */
-  .hero__inner > * {
-    animation: rise 900ms var(--ease-out) both;
-  }
-
-  .hero__inner > :nth-child(2) { animation-delay: 80ms; }
-  .hero__inner > :nth-child(3) { animation-delay: 160ms; }
-  .hero__inner > :nth-child(4) { animation-delay: 240ms; }
-  .hero__inner > :nth-child(5) { animation-delay: 360ms; }
-
-  /* cards and steps rise in as they scroll into view, where supported */
-  @supports (animation-timeline: view()) {
-    .available__grid > li,
-    .lines__grid > li,
-    .steps__list > li,
-    .tips__grid > li {
-      animation: rise linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 70%;
-    }
-  }
-
-  .line-card,
-  .tip-card {
-    transition: transform 400ms var(--ease-out), border-color var(--dur) var(--ease);
-  }
-
-  .line-card:hover,
-  .tip-card:hover {
-    transform: translateY(-4px);
-  }
+.visit__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
 }
 
 /* ---------- Tips pages ---------- */
@@ -565,4 +520,145 @@
   margin-top: var(--s-7);
   padding-top: var(--s-5);
   border-top: 1px solid var(--line);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1099px) {
+  .available__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lines__bento {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'sealed used'
+      'sealed likenew'
+      'android android';
+  }
+}
+
+@media (max-width: 899px) {
+  /* photo on top, copy under it on the fade */
+  .hero {
+    min-height: min(100svh, 46rem);
+  }
+
+  .hero__photo {
+    height: 64%;
+    object-position: 62% 40%;
+  }
+
+  .hero::before {
+    background: linear-gradient(to top, var(--bg) 0%, var(--bg) 36%, rgb(11 11 11 / 0.55) 62%, rgb(11 11 11 / 0.15) 100%);
+  }
+
+  .hero__inner {
+    align-items: flex-end;
+    padding-block: var(--s-6);
+  }
+
+  .hero__sub {
+    font-size: var(--t-base);
+  }
+
+  .available,
+  .lines,
+  .steps,
+  .tips,
+  .visit {
+    padding-block: var(--s-7);
+  }
+
+  .steps__list,
+  .tips__grid,
+  .tips__grid--featured,
+  .visit__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .tips__grid--featured > li:first-child {
+    grid-row: auto;
+  }
+
+  .tips__grid--featured > li:first-child .tip-card {
+    min-height: 16rem;
+  }
+
+  .visit__inner {
+    gap: var(--s-6);
+  }
+
+  .visit__photo {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 639px) {
+  .lines__bento {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'sealed' 'used' 'likenew' 'android';
+  }
+
+  .line-tile--sealed {
+    min-height: 18rem;
+  }
+
+  .line-tile,
+  .tip-card {
+    min-height: 0;
+  }
+}
+
+/* ---------- Motion: transform and opacity only, off for reduced motion ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* hero: the photo settles, then the copy rises in order */
+  .hero__photo {
+    animation: settle 1400ms var(--ease-out) both;
+  }
+
+  .hero__copy > * {
+    animation: rise 900ms var(--ease-out) both;
+  }
+
+  .hero__copy > :nth-child(1) { animation-delay: 150ms; }
+  .hero__copy > :nth-child(2) { animation-delay: 260ms; }
+  .hero__copy > :nth-child(3) { animation-delay: 380ms; }
+
+  /* content rises in as it scrolls into view, where supported */
+  @supports (animation-timeline: view()) {
+    .available__grid > li,
+    .lines__bento > li,
+    .steps__list > li,
+    .tips__grid > li {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+
+  .line-tile,
+  .tip-card {
+    transition: transform 500ms var(--ease-out), border-color var(--dur) var(--ease);
+  }
+
+  @media (hover: hover) {
+    .line-tile:hover,
+    .tip-card:hover {
+      transform: translateY(-3px);
+    }
+  }
 }

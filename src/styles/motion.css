@@ -158,7 +158,7 @@
 
   @supports (animation-timeline: view()) {
     .reveal,
-    .available .section-head,
+    .available__head,
     .related h2 {
       animation: settle-in linear both;
       animation-timeline: view();

@@ -109,6 +109,67 @@
   margin-top: var(--s-6);
 }
 
+/* ---------- Promises: what every purchase includes ---------- */
+.promises__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s-4);
+  padding-block: var(--s-6);
+  border-top: 1px solid var(--line);
+}
+
+.promises__list li {
+  display: flex;
+  gap: var(--s-3);
+  align-items: flex-start;
+}
+
+.promises__list svg {
+  flex: none;
+  margin-top: 0.1rem;
+  color: var(--accent);
+}
+
+.promises__list p {
+  display: grid;
+  gap: 0.15rem;
+  font-size: var(--t-sm);
+}
+
+.promises__list span {
+  color: var(--ink-soft);
+}
+
+/* ---------- Category chips above the stock grid ---------- */
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-5);
+}
+
+.categories__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 2.5rem;
+  padding: 0 var(--s-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  font-size: var(--t-sm);
+  text-decoration: none;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.categories__chip span {
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.categories__chip:hover {
+  border-color: var(--accent);
+}
+
 /* ---------- Lines: four cards with orange numbering ---------- */
 .lines {
   padding-block: var(--s-8);
@@ -250,7 +311,7 @@
 
 .tips__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--s-4);
 }
 
@@ -284,6 +345,12 @@
   font-size: var(--t-xl);
   font-weight: 300;
   line-height: 1.1;
+}
+
+.tip-card__summary {
+  margin-top: var(--s-3);
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
 }
 
 .tip-card__cta {
@@ -362,6 +429,7 @@
 
 /* ---------- Touch-first ---------- */
 @media (max-width: 1099px) {
+  .promises__list,
   .lines__grid,
   .available__grid {
     grid-template-columns: repeat(2, 1fr);
@@ -453,4 +521,48 @@
   .tip-card:hover {
     transform: translateY(-4px);
   }
+}
+
+/* ---------- Tips pages ---------- */
+.tips-page,
+.tip-article {
+  padding-block: var(--s-7) var(--s-8);
+}
+
+.tips-page h1,
+.tip-article h1 {
+  font-size: var(--t-2xl);
+  font-weight: 300;
+  line-height: 1.05;
+}
+
+.tips-page__lead,
+.tip-article__lead {
+  max-width: 40rem;
+  margin-block: var(--s-3) var(--s-6);
+  font-size: var(--t-md);
+  color: var(--ink-soft);
+}
+
+.tip-article {
+  max-width: 48rem;
+}
+
+.tip-article__back {
+  margin-bottom: var(--s-6);
+}
+
+.tip-article .tip-card__tag {
+  display: block;
+  margin-bottom: var(--s-3);
+}
+
+.tip-article__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+  margin-top: var(--s-7);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
 }

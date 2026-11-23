@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronRight } from 'lucide-react'
+import { ArrowRight, ChevronRight, Gift, MapPin, ShieldCheck, Store } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router'
 import { InstagramIcon } from '../components/InstagramIcon'
@@ -6,10 +6,11 @@ import { store } from '../config/store'
 import { CatalogGate } from '../features/products/components/CatalogGate'
 import { InquiryActions } from '../features/products/components/InquiryActions'
 import { ProductCard } from '../features/products/components/ProductCard'
-import { conditionSlug, param } from '../features/products/filters'
+import { conditionSlug, facetOptions, param } from '../features/products/filters'
 import type { Catalog, Product } from '../features/products/types'
 import { useCatalog } from '../features/products/useCatalog'
 import { useTitle } from '../lib/useTitle'
+import { TipCards } from './TipsPage'
 
 const GRID_SIZE = 8
 
@@ -23,15 +24,18 @@ const lines = [
   { title: 'Android', text: 'Motorola y otras marcas.', to: `/catalogo?${param.q}=motorola`, cta: 'Ver stock' },
 ]
 
+/** What every purchase includes, as the owner lists it in his stock messages. */
+const promises = [
+  { icon: Gift, title: 'Funda, vidrio y cable', text: 'Incluidos con cada equipo.' },
+  { icon: ShieldCheck, title: 'Garantía por escrito', text: 'En cada compra, nuevos y usados.' },
+  { icon: Store, title: 'Lo ves antes de pagar', text: 'Lo revisás y probás en el local.' },
+  { icon: MapPin, title: 'Local propio', text: `${store.address}, Mar del Plata.` },
+]
+
 const steps = [
   { title: 'Elegí tu equipo', text: 'Mirá el stock y los precios acá, actualizados desde el local.' },
   { title: 'Escribinos', text: 'Te confirmamos que siga disponible y coordinamos tu visita.' },
   { title: 'Retiralo en el local', text: `Lo ves, lo probás y te lo llevás en ${store.address}.` },
-]
-
-const tips = [
-  { tag: 'Mito vs realidad', title: 'La batería de tu iPhone' },
-  { tag: 'Guía', title: '¿Tu iPhone es original? Así podés saberlo' },
 ]
 
 export function HomePage() {
@@ -75,6 +79,20 @@ export function HomePage() {
         </div>
       </section>
 
+      <section className="page promises" aria-label="Por qué comprar en By Faka">
+        <ul className="promises__list">
+          {promises.map(({ icon: Icon, title, text }) => (
+            <li key={title}>
+              <Icon aria-hidden size={22} />
+              <p>
+                <strong>{title}</strong>
+                <span>{text}</span>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="page lines reveal" aria-labelledby="lines-title">
         <div className="section-head">
           <h2 id="lines-title">Elegí cómo lo querés.</h2>
@@ -108,7 +126,12 @@ export function HomePage() {
           </Link>
         </div>
         <CatalogGate state={state} retry={retry} loading={<GridSkeleton />}>
-          {(c) => <ProductGrid products={availableOf(c)} />}
+          {(c) => (
+            <>
+              <Categories products={availableOf(c)} />
+              <ProductGrid products={availableOf(c)} />
+            </>
+          )}
         </CatalogGate>
       </section>
 
@@ -134,25 +157,31 @@ export function HomePage() {
       <section className="page tips reveal" aria-labelledby="tips-title">
         <div className="section-head">
           <h2 id="tips-title">Sacale el jugo a tu iPhone.</h2>
-          <p>Lo mismo que compartimos en Instagram, siempre a mano.</p>
+          <Link className="text-link" to="/tips" viewTransition>
+            Ver todos los tips <ChevronRight aria-hidden size={18} />
+          </Link>
         </div>
-        <ul className="tips__grid">
-          {tips.map((tip) => (
-            <li key={tip.title}>
-              <a className="tip-card" href={store.instagramUrl} target="_blank" rel="noopener noreferrer">
-                <span className="tip-card__tag">{tip.tag}</span>
-                <span className="tip-card__title">{tip.title}</span>
-                <span className="tip-card__cta">
-                  Ver en @{store.instagramHandle} <ArrowRight aria-hidden size={16} />
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <TipCards />
       </section>
 
       <Visit />
     </div>
+  )
+}
+
+/** One chip per category the stock actually has, so the store's lines (iPhone, accesorios…) are one tap away. */
+function Categories({ products }: { products: Product[] }) {
+  const options = facetOptions(products, 'category')
+  if (options.length < 2) return null
+  return (
+    <nav className="categories" aria-label="Categorías">
+      {options.map(({ value, count }) => (
+        <Link key={value} className="categories__chip" to={`/catalogo?${param.category}=${encodeURIComponent(value)}&${param.available}=1`} viewTransition>
+          {value}
+          <span>{count}</span>
+        </Link>
+      ))}
+    </nav>
   )
 }
 

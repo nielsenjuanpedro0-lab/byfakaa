@@ -22,6 +22,7 @@ const links = {
 }
 
 const docs = [
+  { to: '/garantia', label: 'Garantía, cambios y devoluciones' },
   { to: '/terminos', label: 'Términos y condiciones' },
   { to: '/privacidad', label: 'Política de privacidad' },
   { to: '/defensa-del-consumidor', label: 'Defensa del consumidor' },
@@ -80,8 +81,9 @@ export function TermsPage() {
     >
       <h2>1. Qué es este sitio</h2>
       <p>
-        Este sitio es un catálogo informativo de los equipos que tenemos en el local. No es una tienda online: no tiene carrito,
-        no procesa pagos y no realiza ventas por sí mismo. Las compras se coordinan por mensaje y se concretan en el local.
+        Este sitio es un catálogo informativo de los equipos que tenemos en el local. Podés armar un carrito para
+        consultarnos por varios equipos juntos, pero el sitio no procesa pagos ni realiza ventas por sí mismo: enviar el
+        carrito es una consulta, no una compra. Las compras se coordinan por mensaje y se concretan en el local.
       </p>
 
       <h2>2. Productos, stock y precios</h2>
@@ -409,5 +411,60 @@ function WithdrawalForm() {
         </div>
       )}
     </div>
+  )
+}
+
+export function WarrantyPage() {
+  return (
+    <LegalLayout
+      title="Garantía, cambios y devoluciones"
+      intro="Qué cubre la garantía de tu equipo, qué te llevás con la compra y cómo hacer un reclamo o una devolución."
+    >
+      <h2>Garantía</h2>
+      <p>
+        Todos los equipos tienen la garantía legal del artículo 11 de la{' '}
+        <External href={links.ley24240}>Ley 24.240</External>: <strong>seis (6) meses</strong> para equipos nuevos y{' '}
+        <strong>tres (3) meses</strong> para usados, contados desde la entrega. Te la dejamos por escrito al comprar, junto
+        con el comprobante.
+      </p>
+      <p>
+        La garantía cubre fallas de funcionamiento. No cubre daños por golpes, caídas, humedad o líquidos, ni equipos
+        abiertos o reparados por terceros.
+      </p>
+
+      <h2>Qué incluye tu compra</h2>
+      <ul>
+        <li>Funda protectora.</li>
+        <li>Vidrio templado.</li>
+        <li>Cable de carga.</li>
+      </ul>
+
+      <h2>Cómo hacer un reclamo de garantía</h2>
+      <ol>
+        <li>Escribinos contándonos qué equipo compraste, cuándo y qué falla tiene.</li>
+        <li>Traé el equipo y el comprobante a {store.address}. Lo revisamos y te decimos qué tiene.</li>
+        <li>
+          Si la falla está cubierta, lo reparamos sin costo. Si la reparación no es satisfactoria, podés pedir el cambio por
+          otro equipo equivalente o la devolución de lo que pagaste (art. 17, Ley 24.240).
+        </li>
+      </ol>
+
+      <h2>Cambios y devoluciones</h2>
+      <ul>
+        <li>
+          <strong>Por falla:</strong> los cubre la garantía, como se explica arriba.
+        </li>
+        <li>
+          <strong>Compras a distancia:</strong> si compraste sin venir al local, tenés diez (10) días corridos para
+          arrepentirte. Ver <NavLink to="/arrepentimiento">Botón de arrepentimiento</NavLink>.
+        </li>
+        <li>
+          <strong>Otros cambios:</strong> si el equipo funciona bien pero querés cambiarlo, consultanos y lo vemos caso por
+          caso.
+        </li>
+      </ul>
+
+      <p>Podés contactarnos {contactLine}.</p>
+    </LegalLayout>
   )
 }

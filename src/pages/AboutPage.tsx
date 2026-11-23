@@ -32,7 +32,11 @@ const faqs = [
   },
   {
     q: '¿Puedo comprar desde la web?',
-    a: 'No hay carrito ni pagos online. Elegís el equipo, nos escribís y coordinamos. La compra se concreta en el local.',
+    a: 'Podés armar un carrito con los equipos que te interesan y mandárnoslo en un solo mensaje. Todavía no hay pagos online: te confirmamos disponibilidad y la compra se concreta en el local.',
+  },
+  {
+    q: '¿Qué viene con el equipo?',
+    a: 'Con cada equipo te llevás funda protectora, vidrio templado y cable de carga.',
   },
   {
     q: '¿Puedo ver el equipo antes de comprarlo?',

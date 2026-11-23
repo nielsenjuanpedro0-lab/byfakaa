@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react'
 import { Form, Link, NavLink, useSearchParams } from 'react-router'
+import { CartButton } from '../features/cart/CartButton'
 import { InquiryActions } from '../features/products/components/InquiryActions'
 import { Wordmark } from './Wordmark'
 
@@ -26,6 +27,7 @@ export function Header() {
         <Link to="/catalogo#buscar" className="header-search-link" aria-label="Buscar productos">
           <Search aria-hidden size={22} />
         </Link>
+        <CartButton />
       </div>
     </header>
   )

@@ -8,6 +8,7 @@ const columns = [
       { to: '/catalogo', label: 'Catálogo' },
       { to: '/catalogo?estado=nuevo', label: 'iPhone nuevos' },
       { to: '/catalogo?estado=usado', label: 'iPhone usados' },
+      { to: '/carrito', label: 'Carrito' },
     ],
   },
   {
@@ -15,6 +16,8 @@ const columns = [
     links: [
       { to: '/nosotros', label: 'Nosotros' },
       { to: '/nosotros#faq-title', label: 'Preguntas frecuentes' },
+      { to: '/tips', label: 'Tips' },
+      { to: '/garantia', label: 'Garantía y devoluciones' },
       { to: '/contacto', label: 'El local' },
     ],
   },

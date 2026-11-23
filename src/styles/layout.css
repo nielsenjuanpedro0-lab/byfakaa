@@ -293,3 +293,116 @@
     color: var(--ink);
   }
 }
+
+/* ---------- Floating contact buttons ---------- */
+.contact-fab {
+  position: fixed;
+  right: calc(var(--s-4) + env(safe-area-inset-right));
+  bottom: calc(var(--s-4) + env(safe-area-inset-bottom));
+  z-index: 30;
+  display: grid;
+  gap: var(--s-3);
+}
+
+.contact-fab__btn {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 50%;
+  background: rgb(30 30 30 / 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+  color: var(--ink);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.contact-fab__btn--wa:hover {
+  background: #25d366;
+  color: #062b14;
+}
+
+.contact-fab__btn--ig:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+@media (hover: hover) {
+  .contact-fab__btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 899px) {
+  .contact-fab__btn {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  /* sit above the fixed purchase bar on product pages */
+  body:has(.purchase-bar) .contact-fab {
+    bottom: calc(var(--tabbar-h) + var(--s-5) + env(safe-area-inset-bottom));
+  }
+}
+
+/* ---------- Cart button in the header pill ---------- */
+.cart-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: var(--ink);
+  transition: background var(--dur) var(--ease);
+}
+
+.cart-button:hover {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.cart-button__count {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.15rem;
+  display: grid;
+  place-items: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding-inline: 0.25rem;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Small laptops and tablets in landscape: the search field collapses into its icon so the pill fits */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .header-search {
+    display: none;
+  }
+
+  .header-search-link {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--ink);
+  }
+
+  .site-nav a {
+    white-space: nowrap;
+  }
+}
+
+/* Phones: "Nosotros" stays in the footer so the cart fits in the pill */
+@media (max-width: 479px) {
+  .site-nav a[href='/nosotros'] {
+    display: none;
+  }
+}

@@ -15,6 +15,13 @@ export const store = {
   instagramUrl: 'https://www.instagram.com/apple.by.faka/',
   instagramDmUrl: 'https://ig.me/m/apple.by.faka',
   whatsappNumber,
+  /**
+   * Number painted on the storefront window, for the floating "WhatsApp" button only.
+   * Product inquiries still go to Instagram (owner's request, 13/11/2026: keep WhatsApp from filling up)
+   * unless VITE_WHATSAPP_NUMBER is set.
+   */
+  whatsappContact: '5492235423823',
+  whatsappDisplay: '223 542-3823',
   /** Opening hours as the owner wants them shown, e.g. "Lunes a viernes de 10 a 19 h". Empty: the site says to ask. */
   hours: '',
   /*

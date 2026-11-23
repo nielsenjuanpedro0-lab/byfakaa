@@ -14,12 +14,14 @@ import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import { Layout } from './components/Layout'
 import { AboutPage } from './pages/AboutPage'
+import { CartPage } from './pages/CartPage'
 import { CatalogPage } from './pages/CatalogPage'
 import { ContactPage } from './pages/ContactPage'
 import { HomePage } from './pages/HomePage'
-import { ConsumerPage, PrivacyPage, TermsPage, WithdrawalPage } from './pages/LegalPages'
+import { ConsumerPage, PrivacyPage, TermsPage, WarrantyPage, WithdrawalPage } from './pages/LegalPages'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ProductPage } from './pages/ProductPage'
+import { TipArticlePage, TipsPage } from './pages/TipsPage'
 
 const router = createBrowserRouter([
   {
@@ -28,8 +30,12 @@ const router = createBrowserRouter([
       { path: '/', element: <HomePage /> },
       { path: '/catalogo', element: <CatalogPage /> },
       { path: '/producto/:id', element: <ProductPage /> },
+      { path: '/carrito', element: <CartPage /> },
+      { path: '/tips', element: <TipsPage /> },
+      { path: '/tips/:slug', element: <TipArticlePage /> },
       { path: '/contacto', element: <ContactPage /> },
       { path: '/nosotros', element: <AboutPage /> },
+      { path: '/garantia', element: <WarrantyPage /> },
       { path: '/terminos', element: <TermsPage /> },
       { path: '/privacidad', element: <PrivacyPage /> },
       { path: '/defensa-del-consumidor', element: <ConsumerPage /> },

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /carrito
+
+Sitemap: https://www.byfaka.store/sitemap.xml

@@ -1,5 +1,6 @@
 import { ChevronLeft, MapPin } from 'lucide-react'
 import { Link, useParams } from 'react-router'
+import { AddToCart } from '../features/cart/AddToCart'
 import { store } from '../config/store'
 import { Availability } from '../features/products/components/Availability'
 import { CatalogGate } from '../features/products/components/CatalogGate'
@@ -74,6 +75,7 @@ function ProductDetail({ product, catalog }: { product: Product; catalog: Catalo
 
           <div className="detail__actions">
             <InquiryActions product={product} />
+            {!soldOut && <AddToCart product={product} />}
             <p className="detail__note">
               {soldOut
                 ? 'Este producto no tiene stock ahora. Consultanos si va a volver a entrar.'

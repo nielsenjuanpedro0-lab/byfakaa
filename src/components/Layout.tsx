@@ -1,4 +1,5 @@
 import { Outlet, ScrollRestoration } from 'react-router'
+import { ContactButtons } from './ContactButtons'
 import { Footer } from './Footer'
 import { Header } from './Header'
 
@@ -11,6 +12,7 @@ export function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <ContactButtons />
       <ScrollRestoration />
     </>
   )

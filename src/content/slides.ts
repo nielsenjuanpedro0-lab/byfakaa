@@ -14,22 +14,22 @@ export interface Slide {
 
 export const slides: Slide[] = [
   {
-    title: 'Envío gratis en Mar del Plata',
-    text: 'En compras desde $100.000. Te lo llevamos a tu casa.',
+    title: 'Te esperamos en el local',
+    text: 'Av. Independencia 1273, entre 11 de Septiembre y 3 de Febrero. De 11 a 18 h.',
     image: '/brand/local-fachada.jpg',
     alt: 'Fachada del local By Faka',
-    link: { to: '/catalogo', label: 'Ver catálogo' },
+    link: { to: '/contacto', label: 'Cómo llegar' },
   },
   {
-    title: 'Cable nuevo, funda y templado',
-    text: 'Todos nuestros teléfonos se entregan listos: carga y protección desde el primer momento.',
-    link: { to: '/catalogo', label: 'Ver equipos' },
+    title: 'Elevá tu experiencia de compra',
+    text: 'Guías simples para empezar a usarlo, cuidarlo y hacer de tu compra, algo seguro.',
+    link: { to: '/tips', label: 'Ver los tips' },
   },
   {
-    title: 'Visitanos en el local',
-    text: 'Av. Independencia 1273, entre 11 de Septiembre y 3 de Febrero. De 11 a 18 h.',
+    title: 'Encargalo desde tu casa',
+    text: 'Armá tu carrito, mandanos el mensaje y coordinamos la entrega.',
     image: '/brand/local-vertical.webp',
     alt: 'Entrada del local By Faka',
-    link: { to: '/contacto', label: 'Cómo llegar' },
+    link: { to: '/catalogo', label: 'Ver catálogo' },
   },
 ]

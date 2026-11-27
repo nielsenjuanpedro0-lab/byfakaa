@@ -124,26 +124,46 @@
   text-decoration-color: var(--ink);
 }
 
-/* ---------- Promise: what every purchase includes, set as one sentence ---------- */
+/* ---------- Promise: what every purchase includes, three equal cards ---------- */
 .promise {
-  padding-block: var(--s-7);
-  border-bottom: 1px solid var(--line);
+  /* pulled up into the hero's fade so no empty band sits between them; stacked above the hero */
+  position: relative;
+  z-index: 1;
+  margin-top: calc(-1 * var(--s-8));
+  padding-bottom: var(--s-7);
 }
 
-.promise p {
-  max-width: 52rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.375rem, 1rem + 1.3vw, 2.125rem);
-  font-weight: 300;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  color: var(--ink-faint);
-  text-wrap: pretty;
+.promise__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.promise strong {
+.promise__item {
+  padding: var(--s-5) var(--s-6) var(--s-6);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--card);
+}
+
+.promise__item svg {
+  color: var(--accent);
+}
+
+.promise__item h2 {
+  margin-top: var(--s-4);
+  font-size: var(--t-md);
   font-weight: 400;
-  color: var(--ink);
+  line-height: 1.2;
+}
+
+.promise__item p {
+  margin-top: var(--s-2);
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
 }
 
 /* ---------- Available: stock grid ---------- */
@@ -667,29 +687,6 @@
 }
 
 
-/* ---------- Promise: shipping, accessories, warranty ---------- */
-.promise {
-  display: grid;
-  gap: var(--s-4);
-}
-
-.promise .promise__shipping {
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
-  font-size: var(--t-md);
-  font-weight: 400;
-}
-
-.promise__shipping svg {
-  flex: none;
-  color: var(--accent);
-}
-
-.promise .promise__warranty {
-  font-size: var(--t-md);
-}
-
 /* ---------- Carousel ---------- */
 .carousel {
   position: relative;
@@ -893,6 +890,33 @@
 }
 
 @media (max-width: 899px) {
+  .promise {
+    margin-top: 0;
+  }
+
+  .promise__list {
+    grid-template-columns: 1fr;
+    gap: var(--s-3);
+  }
+
+  /* compact rows on phones: icon beside the text */
+  .promise__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--s-4);
+    padding: var(--s-4) var(--s-5);
+  }
+
+  .promise__item svg {
+    grid-row: span 2;
+    margin-top: 2px;
+  }
+
+  .promise__item h2 {
+    margin-top: 0;
+    font-size: var(--t-base);
+  }
+
   .home-faq {
     grid-template-columns: 1fr;
     gap: var(--s-5);

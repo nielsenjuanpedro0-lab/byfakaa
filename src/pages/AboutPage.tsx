@@ -1,6 +1,7 @@
 import { ChevronRight } from 'lucide-react'
 import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router'
+import { Faq } from '../components/Faq'
 import { store } from '../config/store'
 import { InquiryActions } from '../features/products/components/InquiryActions'
 import { useTitle } from '../lib/useTitle'
@@ -9,7 +10,7 @@ import { useTitle } from '../lib/useTitle'
 const principles = [
   {
     term: 'Stock real',
-    text: 'La web lee el inventario de nuestro sistema de gestión. Cada equipo publicado es una unidad que tenemos en el local, con su capacidad, color, estado y precio.',
+    text: 'La web lee el inventario de nuestro sistema de gestión. Cada equipo publicado es una unidad que tenemos disponible, con su capacidad, color, estado y precio.',
   },
   {
     term: 'Lo ves antes de pagar',
@@ -20,45 +21,8 @@ const principles = [
     text: 'Si dudás entre dos modelos o no sabés qué capacidad te conviene, te ayudamos a elegir según cómo lo vas a usar y cuánto querés invertir.',
   },
   {
-    term: 'Garantía legal',
-    text: 'Todo equipo tiene la garantía que fija la Ley 24.240: seis meses los nuevos y tres meses los usados, desde la entrega.',
-  },
-]
-
-const faqs = [
-  {
-    q: '¿El stock de la web está actualizado?',
-    a: 'Sí. La web toma los equipos directamente de nuestro inventario, así que lo que ves está disponible. Puede haber unos minutos de diferencia con una venta reciente, por eso te recomendamos consultar antes de venir.',
-  },
-  {
-    q: '¿Puedo comprar desde la web?',
-    a: 'Podés armar un carrito con los equipos que te interesan y mandárnoslo en un solo mensaje. Todavía no hay pagos online: te confirmamos disponibilidad y la compra se concreta en el local.',
-  },
-  {
-    q: '¿Qué viene con el equipo?',
-    a: 'Con cada equipo te llevás funda protectora, vidrio templado y cable de carga.',
-  },
-  {
-    q: '¿Puedo ver el equipo antes de comprarlo?',
-    a: `Sí, siempre. Pasá por ${store.address}, ${store.city}. Si venís por un equipo puntual, avisanos antes y te confirmamos que siga disponible.`,
-  },
-  {
-    q: '¿Qué garantía tienen los equipos?',
-    a: 'Todos tienen la garantía legal de la Ley de Defensa del Consumidor: 6 meses para equipos nuevos y 3 meses para usados, contados desde la entrega. Si un equipo tiene una garantía adicional, te la informamos por escrito al comprar.',
-  },
-  {
-    q: '¿Qué significa “Nuevo” y “Usado”?',
-    a: 'Es el estado con el que cada unidad está registrada en nuestro inventario. En los usados, cuando tenemos el dato, mostramos la salud de la batería. Para más detalle sobre estética o accesorios incluidos, consultanos por el equipo puntual.',
-  },
-  {
-    q: '¿En qué moneda están los precios? ¿Cómo se paga?',
-    a: 'Cada equipo muestra su precio en la moneda en que está publicado: dólares (US$) o pesos ($). Las formas de pago disponibles te las confirmamos al consultar.',
-  },
-  {
-    q: '¿Cómo los contacto?',
-    a: store.whatsappNumber
-      ? `Por WhatsApp o por Instagram (@${store.instagramHandle}). También podés pasar directamente por el local.`
-      : `Por mensaje directo en Instagram (@${store.instagramHandle}), o pasando directamente por el local.`,
+    term: 'Garantía',
+    text: 'Nuestras garantías cubren desde 30 a 90 días en los usados, y de 6 meses a 1 año en los equipos nuevos.',
   },
 ]
 
@@ -72,11 +36,28 @@ export function AboutPage() {
   return (
     <div className="about">
       <section className="page about__intro">
-        <h1>Sobre By Faka</h1>
-        <p className="about__lead">
-          By Faka es una tienda de productos Apple en {store.address}. Vendemos iPhone nuevos y usados y accesorios, en el
-          local y por mensaje. Hablás directamente con nosotros, ves el equipo y te lo llevás.
-        </p>
+        <h1>Sobre nosotros</h1>
+        <div className="about__story">
+          <p className="about__lead">
+            Mi nombre es Facundo, y me dedico a la venta de productos Apple desde 2021. Donde en un escenario de pandemia y
+            con objetivos claros de crear algo propio relacionado a la tecnología que tanto me apasiona, comenzó “Apple By
+            Faka”.
+          </p>
+          <p>
+            Lo que hoy se plasma en un local sobre Avenida Independencia, por mucho tiempo fue vender en cafés, a domicilio,
+            en oficinas. Hoy, verlo convertido en realidad representa mucho más que un espacio físico: es el resultado de todo
+            el camino recorrido.
+          </p>
+          <p>
+            Desde el primer día, mi idea fue la misma: ofrecer buenos productos, asesoramiento sincero y, sobre todo, una
+            atención cercana y personalizada. Siempre con la mirada en mejorar día a día.
+          </p>
+          <p>
+            Creo que lo más importante no es solamente lo que vendemos, sino la confianza que construimos con cada cliente.
+          </p>
+          <p>Gracias por ser parte de esta historia.</p>
+          <p className="about__signature">Facundo — By Faka Store</p>
+        </div>
       </section>
 
       <section className="page about__principles" aria-labelledby="principles-title">
@@ -93,14 +74,7 @@ export function AboutPage() {
 
       <section className="page about__faq" aria-labelledby="faq-title">
         <h2 id="faq-title">Preguntas frecuentes</h2>
-        <div className="faq">
-          {faqs.map(({ q, a }) => (
-            <details key={q}>
-              <summary>{q}</summary>
-              <p>{a}</p>
-            </details>
-          ))}
-        </div>
+        <Faq />
       </section>
 
       <section className="page about__cta">

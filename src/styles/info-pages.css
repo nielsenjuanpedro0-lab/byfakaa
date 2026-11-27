@@ -421,3 +421,27 @@
     padding: var(--s-5);
   }
 }
+
+
+/* ---------- About: owner's story ---------- */
+.about__story {
+  display: grid;
+  gap: var(--s-4);
+  max-width: 40rem;
+  margin-top: var(--s-6);
+}
+
+.about__story .about__lead {
+  margin-top: 0;
+}
+
+.about__story p:not(.about__lead) {
+  color: var(--ink-soft);
+}
+
+.about__story .about__signature {
+  margin-top: var(--s-3);
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--ink);
+}

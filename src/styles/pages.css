@@ -22,7 +22,7 @@
   display: block;
   font-family: var(--font-display);
   /* capped by viewport width so "Independencia" never overflows a 320px phone */
-  font-size: min(var(--t-3xl), 10.5vw);
+  font-size: min(var(--t-2xl), 9vw);
   font-weight: 600;
   line-height: 1.04;
   letter-spacing: -0.035em;
@@ -35,6 +35,21 @@
   font-size: var(--t-md);
   font-weight: 500;
   color: var(--ink-soft);
+}
+
+.store-info__hours {
+  margin-top: var(--s-5);
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  font-weight: 600;
+}
+
+.store-info__hours span {
+  display: block;
+  margin-bottom: var(--s-1);
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--ink-faint);
 }
 
 .store-info__links {

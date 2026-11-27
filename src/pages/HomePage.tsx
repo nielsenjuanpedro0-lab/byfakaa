@@ -1,8 +1,13 @@
-import { ArrowRight, ChevronRight, MapPin } from 'lucide-react'
+import { ArrowRight, ChevronRight, MapPin, Truck } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router'
+import { Carousel } from '../components/Carousel'
+import { Faq } from '../components/Faq'
 import { InstagramIcon } from '../components/InstagramIcon'
 import { store } from '../config/store'
+import { freeShippingLabel } from '../content/faqs'
+import { isOffer, offerIds } from '../content/offers'
+import { slides } from '../content/slides'
 import { CatalogGate } from '../features/products/components/CatalogGate'
 import { ProductCard } from '../features/products/components/ProductCard'
 import { conditionSlug, facetOptions, param } from '../features/products/filters'
@@ -69,7 +74,8 @@ export function HomePage() {
               <span>a tu alcance.</span>
             </h1>
             <p className="hero__sub">
-              iPhones nuevos, sellados y usados seleccionados. Vení a verlos a {store.address}, Mar del Plata.
+              Creemos que comprar tecnología tiene que ser una buena experiencia. Por eso, nos tomamos el tiempo de
+              escucharte, asesorarte y ayudarte a encontrar lo que realmente necesitás.
             </p>
             <div className="hero__actions">
               {/* the stock count lives in the action itself instead of a badge */}
@@ -85,13 +91,25 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* What every purchase includes, as the owner lists it in his stock messages: said once, as a sentence */}
+      {/* What every purchase includes, in the owner's words */}
       <section className="page promise" aria-label="Qué incluye tu compra">
+        <p className="promise__shipping">
+          <Truck aria-hidden size={22} strokeWidth={1.5} />
+          <span>
+            <strong>Envío gratis en Mar del Plata</strong> en compras desde {freeShippingLabel}.
+          </span>
+        </p>
         <p>
-          Cada equipo sale con <strong>funda, vidrio templado y cable</strong>, y con <strong>garantía por escrito</strong>.
-          Antes de pagar, <strong>lo revisás y lo probás en el local</strong>.
+          Todos nuestros teléfonos se entregan con <strong>cable nuevo, funda y templado</strong>. Carga y protección desde
+          el primer momento.
+        </p>
+        <p className="promise__warranty">
+          Nuestras garantías cubren desde <strong>30 a 90 días en los usados</strong>, y de{' '}
+          <strong>6 meses a 1 año en los equipos nuevos</strong>.
         </p>
       </section>
+
+      <Carousel slides={slides} label="Novedades" />
 
       <section className="page available" aria-labelledby="available-title">
         <div className="available__head">
@@ -109,6 +127,8 @@ export function HomePage() {
           )}
         </CatalogGate>
       </section>
+
+      {catalog && <Offers catalog={catalog} />}
 
       <section className="page lines reveal" aria-labelledby="lines-title">
         <h2 id="lines-title">Elegí cómo lo querés.</h2>
@@ -148,7 +168,7 @@ export function HomePage() {
 
       <section className="page tips reveal" aria-labelledby="tips-title">
         <div className="tips__head">
-          <h2 id="tips-title">Sacale el jugo a tu iPhone.</h2>
+          <h2 id="tips-title">Elevá tu experiencia de compra.</h2>
           <Link className="text-link" to="/tips" viewTransition>
             Todos los tips <ChevronRight aria-hidden size={18} />
           </Link>
@@ -156,8 +176,32 @@ export function HomePage() {
         <TipCards featured />
       </section>
 
+      <section className="page home-faq reveal" aria-labelledby="home-faq-title">
+        <h2 id="home-faq-title">Preguntas frecuentes</h2>
+        <Faq />
+      </section>
+
       <Visit />
     </div>
+  )
+}
+
+/** Units marked as offers (Stackr category "Ofertas" or listed in content/offers.ts). Hidden when there are none. */
+function Offers({ catalog }: { catalog: Catalog }) {
+  const offers = availableOf(catalog).filter(isOffer)
+  if (offers.length === 0) return null
+  return (
+    <section id="ofertas" className="page offers reveal" aria-labelledby="offers-title">
+      <h2 id="offers-title">Ofertas.</h2>
+      <ul className="offers__grid">
+        {offers.map((product) => (
+          <li key={product.id}>
+            {offerIds[product.id] && <span className="offers__tag">{offerIds[product.id]}</span>}
+            <ProductCard product={product} />
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 
@@ -229,13 +273,9 @@ function Visit() {
           <h2 id="visit-title">Te esperamos en el local.</h2>
           <address>
             <span className="visit__address">{store.address}</span>
-            <span className="visit__city">{store.city}</span>
+            <span className="visit__city">{store.between}</span>
           </address>
-          <p>
-            {store.hours
-              ? store.hours
-              : 'Antes de venir, escribinos: te confirmamos el horario y que el equipo que querés siga disponible.'}
-          </p>
+          <p>Horarios: {store.hours.toLowerCase()}.</p>
           <div className="visit__actions">
             <a className="button" href={store.mapsUrl} target="_blank" rel="noopener noreferrer">
               <MapPin aria-hidden size={18} />

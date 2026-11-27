@@ -2,8 +2,8 @@ import { ChevronRight } from 'lucide-react'
 import { store } from '../config/store'
 import { inquiryMessage, whatsappUrl } from '../features/products/inquiry'
 
-/** Address and contact channels. Only owner-supplied facts; hours are not shown because they are unknown. */
-export function StoreInfo({ headingLevel = 2 }: { headingLevel?: 1 | 2 | 3 }) {
+/** Address, hours and contact channels. Only owner-supplied facts. */
+export function StoreInfo({ headingLevel = 2, heading = 'El local' }: { headingLevel?: 1 | 2 | 3; heading?: string }) {
   const Heading = `h${headingLevel}` as const
   const wa = whatsappUrl(inquiryMessage())
   const links = [
@@ -14,11 +14,15 @@ export function StoreInfo({ headingLevel = 2 }: { headingLevel?: 1 | 2 | 3 }) {
 
   return (
     <div className="store-info">
-      <Heading className="store-info__heading">El local</Heading>
+      <Heading className="store-info__heading">{heading}</Heading>
       <address>
         <span className="store-info__street">{store.address}</span>
-        <span className="store-info__city">{store.city}</span>
+        <span className="store-info__city">{store.between}</span>
       </address>
+      <p className="store-info__hours">
+        <span>Horarios</span>
+        {store.hours}
+      </p>
       <ul className="store-info__links">
         {links.map((link) => (
           <li key={link.href}>

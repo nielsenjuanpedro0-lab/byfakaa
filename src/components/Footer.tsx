@@ -12,7 +12,7 @@ const columns = [
     ],
   },
   {
-    title: 'By Faka',
+    title: store.storeName,
     links: [
       { to: '/nosotros', label: 'Nosotros' },
       { to: '/nosotros#faq-title', label: 'Preguntas frecuentes' },
@@ -39,13 +39,14 @@ export function Footer() {
       <div className="page site-footer__inner">
         <div className="site-footer__top">
           <div className="site-footer__brand">
-            <p className="site-footer__name">{store.name}</p>
+            <p className="site-footer__name">{store.storeName}</p>
             <address>
               {store.address}
               <br />
               {store.city}
             </address>
             <a href={store.instagramUrl} target="_blank" rel="noopener noreferrer">@{store.instagramHandle}</a>
+            <a href={`https://wa.me/${store.whatsappContact}`} target="_blank" rel="noopener noreferrer">{store.whatsappDisplay}</a>
           </div>
           {columns.map((col) => (
             <nav key={col.title} aria-label={col.title} className="site-footer__col">
@@ -60,7 +61,7 @@ export function Footer() {
         <div className="site-footer__bottom">
           <div>
             <p>
-              © {year} {store.name}
+              © {year} {store.storeName}
               {legalIdentity && ` · ${legalIdentity}`}. Todos los derechos reservados.
             </p>
             <p className="site-footer__legal">

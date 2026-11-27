@@ -392,6 +392,9 @@
 }
 
 .tip-card__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   font-size: var(--t-xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -660,5 +663,247 @@
     .tip-card:hover {
       transform: translateY(-3px);
     }
+  }
+}
+
+
+/* ---------- Promise: shipping, accessories, warranty ---------- */
+.promise {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.promise .promise__shipping {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-size: var(--t-md);
+  font-weight: 400;
+}
+
+.promise__shipping svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.promise .promise__warranty {
+  font-size: var(--t-md);
+}
+
+/* ---------- Carousel ---------- */
+.carousel {
+  position: relative;
+  background: var(--surface);
+}
+
+.carousel__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__slide {
+  position: relative;
+  flex: 0 0 100%;
+  display: grid;
+  align-items: center;
+  min-height: clamp(18rem, 36vw, 28rem);
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+.carousel__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darken photos so the copy stays readable */
+.carousel__slide--photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.2));
+}
+
+.carousel__copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: var(--s-3);
+  width: 100%;
+  padding-block: var(--s-7) var(--s-8);
+}
+
+.carousel__title {
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.carousel__text {
+  max-width: 34rem;
+  margin-bottom: var(--s-3);
+  font-size: var(--t-md);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.carousel__controls {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  bottom: var(--s-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.carousel__dots,
+.carousel__arrows {
+  display: flex;
+  gap: var(--s-2);
+  pointer-events: auto;
+}
+
+.carousel__dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.carousel__dots button[aria-current='true'] {
+  background: var(--ink);
+  transform: scale(1.25);
+}
+
+.carousel__arrows button {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.4);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.carousel__arrows button:hover {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+/* ---------- Offers ---------- */
+.offers {
+  padding-block: var(--s-8);
+  border-top: 1px solid var(--line);
+  scroll-margin-top: var(--header-h);
+}
+
+.offers h2 {
+  font-size: var(--t-xl);
+  line-height: 1.1;
+}
+
+.offers__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--s-4);
+  margin: var(--s-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.offers__grid li {
+  position: relative;
+}
+
+.offers__tag {
+  position: absolute;
+  top: var(--s-3);
+  left: var(--s-3);
+  z-index: 1;
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--on-ink);
+  font-size: var(--t-xs);
+  font-weight: 600;
+}
+
+/* ---------- Home FAQ ---------- */
+.home-faq {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) 2.2fr;
+  gap: var(--s-6);
+  padding-block: var(--s-8);
+  border-top: 1px solid var(--line);
+}
+
+.home-faq h2 {
+  font-size: var(--t-lg);
+  line-height: 1.15;
+}
+
+/* ---------- Tip video ---------- */
+.tip-video {
+  overflow: hidden;
+  max-width: 48rem;
+  aspect-ratio: 16 / 9;
+  margin-bottom: var(--s-7);
+  border-radius: var(--r-card);
+  background: var(--card);
+}
+
+.tip-video iframe,
+.tip-video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: contain;
+}
+
+.tip-video--empty {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--s-2);
+  color: var(--ink-faint);
+  font-size: var(--t-sm);
+}
+
+@media (max-width: 899px) {
+  .home-faq {
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+    padding-block: var(--s-7);
+  }
+
+  .carousel__arrows {
+    display: none;
+  }
+
+  .carousel__controls {
+    justify-content: center;
   }
 }

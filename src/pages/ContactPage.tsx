@@ -9,7 +9,7 @@ export function ContactPage() {
   return (
     <div className="contact">
       <section className="page">
-        <StoreInfo headingLevel={1} />
+        <StoreInfo headingLevel={1} heading="Encontranos en" />
       </section>
 
       <section className="page contact__map" aria-label="Mapa">
@@ -20,13 +20,13 @@ export function ContactPage() {
         <div>
           <Clock aria-hidden size={24} strokeWidth={1.5} />
           <h2>Horarios</h2>
-          <p>{store.hours || 'Escribinos antes de venir y te confirmamos el horario de atención del día.'}</p>
+          <p>{store.hours}.</p>
         </div>
         <div>
           <Navigation aria-hidden size={24} strokeWidth={1.5} />
           <h2>Cómo llegar</h2>
           <p>
-            Estamos sobre {store.address}, {store.city}.{' '}
+            Estamos sobre {store.address}, {store.between}, {store.city}.{' '}
             <a href={store.mapsUrl} target="_blank" rel="noopener noreferrer">Abrí la ubicación en Google Maps</a> para ver el
             recorrido desde donde estés.
           </p>

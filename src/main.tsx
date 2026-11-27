@@ -19,6 +19,7 @@ import { HomePage } from './pages/HomePage'
 import { ConsumerPage, PrivacyPage, TermsPage, WithdrawalPage } from './pages/LegalPages'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ProductPage } from './pages/ProductPage'
+import { TipsPage } from './pages/TipsPage'
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
       { path: '/producto/:id', element: <ProductPage /> },
       { path: '/contacto', element: <ContactPage /> },
       { path: '/nosotros', element: <AboutPage /> },
+      { path: '/tips', element: <TipsPage /> },
       { path: '/terminos', element: <TermsPage /> },
       { path: '/privacidad', element: <PrivacyPage /> },
       { path: '/defensa-del-consumidor', element: <ConsumerPage /> },

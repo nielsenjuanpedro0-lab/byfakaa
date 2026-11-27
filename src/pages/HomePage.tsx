@@ -1,8 +1,13 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, PackageCheck, ShieldCheck, Truck } from 'lucide-react'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router'
+import { Carousel } from '../components/Carousel'
+import { Faq } from '../components/Faq'
 import { InstagramIcon } from '../components/InstagramIcon'
 import { store } from '../config/store'
+import { freeShippingLabel } from '../content/faqs'
+import { isOffer, offerIds } from '../content/offers'
+import { slides } from '../content/slides'
 import { CatalogGate } from '../features/products/components/CatalogGate'
 import { Finder } from '../features/products/components/Finder'
 import { InquiryActions } from '../features/products/components/InquiryActions'
@@ -27,6 +32,8 @@ export function HomePage() {
 
   return (
     <div>
+      <Carousel slides={slides} label="Novedades" />
+
       <section className="page hero" aria-labelledby="hero-title">
         <div className="hero__copy">
           <p className="hero__place">
@@ -34,7 +41,8 @@ export function HomePage() {
           </p>
           <h1 id="hero-title">iPhone nuevos y usados</h1>
           <p className="hero__sub">
-            Mirá qué hay en stock y a qué precio. Consultanos por mensaje y pasá a verlo por el local.
+            Creemos que comprar tecnología tiene que ser una buena experiencia. Por eso, nos tomamos el tiempo de escucharte,
+            asesorarte y ayudarte a encontrar lo que realmente necesitás.
           </p>
           <div className="hero__actions">
             <Link className="button" to="/catalogo" viewTransition>Ver catálogo</Link>
@@ -52,6 +60,8 @@ export function HomePage() {
         {catalog && <Featured catalog={catalog} />}
       </section>
 
+      <Promises />
+
       <section className="shelf" aria-labelledby="shelf-title">
         <div className="page shelf__head">
           <h2 id="shelf-title">En stock</h2>
@@ -61,12 +71,70 @@ export function HomePage() {
         </CatalogGate>
       </section>
 
+      {catalog && <Offers catalog={catalog} />}
+
       {catalog && <FinderSection catalog={catalog} />}
+
+      <section className="page home-faq reveal" aria-labelledby="home-faq-title">
+        <h2 id="home-faq-title">Preguntas frecuentes</h2>
+        <Faq />
+      </section>
 
       <Visit />
 
       <Messages />
     </div>
+  )
+}
+
+/** What every purchase includes: delivery, accessories and warranty. */
+function Promises() {
+  const items = [
+    {
+      Icon: Truck,
+      title: 'Envío gratis en Mar del Plata',
+      text: `En compras desde ${freeShippingLabel}. Te lo llevamos a tu casa.`,
+    },
+    {
+      Icon: PackageCheck,
+      title: 'Cable nuevo, funda y templado',
+      text: 'Todos nuestros teléfonos se entregan con cable nuevo, funda y templado. Carga y protección desde el primer momento.',
+    },
+    {
+      Icon: ShieldCheck,
+      title: 'Garantía',
+      text: 'Nuestras garantías cubren desde 30 a 90 días en los usados, y de 6 meses a 1 año en los equipos nuevos.',
+    },
+  ]
+  return (
+    <section className="page promises" aria-label="Lo que incluye tu compra">
+      {items.map(({ Icon, title, text }) => (
+        <div key={title} className="promises__item">
+          <Icon aria-hidden size={26} strokeWidth={1.5} />
+          <h2>{title}</h2>
+          <p>{text}</p>
+        </div>
+      ))}
+    </section>
+  )
+}
+
+/** Units marked as offers (Stackr category "Ofertas" or listed in content/offers.ts). Hidden when there are none. */
+function Offers({ catalog }: { catalog: Catalog }) {
+  const offers = availableOf(catalog).filter(isOffer)
+  if (offers.length === 0) return null
+  return (
+    <section id="ofertas" className="page offers reveal" aria-labelledby="offers-title">
+      <h2 id="offers-title">Ofertas</h2>
+      <ul className="offers__grid">
+        {offers.map((product) => (
+          <li key={product.id}>
+            {offerIds[product.id] && <span className="offers__tag">{offerIds[product.id]}</span>}
+            <ProductCard product={product} />
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 
@@ -105,13 +173,9 @@ function Visit() {
           <h2 id="visit-title">Dónde estamos</h2>
           <address>
             <span className="visit__address">{store.address}</span>
-            <span className="visit__city">{store.city}</span>
+            <span className="visit__city">{store.between}</span>
           </address>
-          <p>
-            {store.hours
-              ? store.hours
-              : 'Antes de venir, escribinos: te confirmamos el horario y que el equipo que querés siga disponible.'}
-          </p>
+          <p>Horarios: {store.hours.toLowerCase()}. Si venís por un equipo puntual, escribinos y te confirmamos que siga disponible.</p>
           <Link className="text-link" to="/contacto" viewTransition>
             Cómo llegar y horarios
             <ChevronRight aria-hidden size={18} />

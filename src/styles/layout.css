@@ -262,3 +262,15 @@
     color: var(--ink);
   }
 }
+
+/* Five links (Tips added) on narrow phones: tighten so the search icon stays on screen */
+@media (max-width: 430px) {
+  .site-header__inner {
+    gap: var(--s-2);
+  }
+
+  .site-nav a {
+    padding-inline: 0.3rem;
+    font-size: 0.8125rem;
+  }
+}

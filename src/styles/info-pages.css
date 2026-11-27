@@ -419,3 +419,143 @@
     padding: var(--s-5);
   }
 }
+
+
+/* ---------- About: owner's story ---------- */
+.about__story {
+  display: grid;
+  gap: var(--s-4);
+  max-width: 40rem;
+  margin-top: var(--s-6);
+}
+
+.about__story .about__lead {
+  margin-top: 0;
+}
+
+.about__story p:not(.about__lead) {
+  color: var(--ink-soft);
+}
+
+.about__story .about__signature {
+  margin-top: var(--s-3);
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- Tips ---------- */
+.tips__intro {
+  padding-block: var(--s-9) var(--s-7);
+}
+
+.tips__intro h1 {
+  max-width: 16ch;
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.tips__lead {
+  max-width: 36rem;
+  margin-top: var(--s-5);
+  font-size: var(--t-md);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.tips__index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-6);
+}
+
+.tips__index a {
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  color: var(--ink);
+  font-size: var(--t-sm);
+  text-decoration: none;
+}
+
+.tips__index a:hover {
+  border-color: var(--ink);
+}
+
+.tips__list {
+  display: grid;
+  gap: var(--s-5);
+  padding-bottom: var(--s-8);
+}
+
+.tip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: var(--s-6);
+  align-items: start;
+  padding: var(--s-5);
+  border-radius: var(--r-card);
+  background: var(--card);
+  scroll-margin-top: calc(var(--header-h) + var(--s-5));
+}
+
+.tip__video {
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-control);
+  background: var(--bg);
+}
+
+.tip__video iframe,
+.tip__video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: contain;
+}
+
+.tip__video--empty {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--s-2);
+  color: var(--ink-faint);
+  font-size: var(--t-sm);
+}
+
+.tip__body h2 {
+  font-size: var(--t-lg);
+  line-height: 1.15;
+}
+
+.tip__summary {
+  margin-top: var(--s-2);
+  color: var(--ink-soft);
+}
+
+.tip__body ol {
+  display: grid;
+  gap: var(--s-2);
+  margin: var(--s-4) 0 0;
+  padding-left: 1.25rem;
+}
+
+.tip__body li::marker {
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+
+@media (max-width: 899px) {
+  .tips__intro {
+    padding-block: var(--s-8) var(--s-6);
+  }
+
+  .tip {
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+}

@@ -1,14 +1,23 @@
 import { whatsappNumber } from './env'
 
-// Business facts supplied by the owner (see docs/brand-research.md). Opening hours are unknown, so they are not shown.
+// Business facts supplied by the owner (see docs/brand-research.md).
 const address = 'Av. Independencia 1273'
 const city = 'Mar del Plata, Buenos Aires'
 
 export const store = {
   name: 'By Faka',
+  /** Name shown in the footer. */
+  storeName: 'By Faka Store',
   fullName: 'By Faka | Apple Store',
   address,
+  /** Cross streets, shown under the address. */
+  between: 'entre 11 de Septiembre y 3 de Febrero',
   city,
+  /** Phone as shown, and in tel: format. */
+  phone: '223 542 3823',
+  phoneHref: 'tel:+542235423823',
+  /** Free delivery inside Mar del Plata from this order total (ARS). */
+  freeShippingFrom: 100000,
   mapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address}, ${city}, Argentina`)}`,
   mapsEmbedUrl: `https://www.google.com/maps?q=${encodeURIComponent(`${address}, ${city}, Argentina`)}&output=embed`,
   instagramHandle: 'apple.by.faka',
@@ -16,7 +25,7 @@ export const store = {
   instagramDmUrl: 'https://ig.me/m/apple.by.faka',
   whatsappNumber,
   /** Opening hours as the owner wants them shown, e.g. "Lunes a viernes de 10 a 19 h". Empty: the site says to ask. */
-  hours: '',
+  hours: 'De 11 a 18 h',
   /*
    * Legal identity, required by Ley 24.240 and AFIP for a commercial website. Fill in with the owner's real data:
    * the legal pages and footer show each field only once it is set.

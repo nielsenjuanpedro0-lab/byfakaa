@@ -464,3 +464,224 @@
     margin-top: var(--s-7);
   }
 }
+
+
+/* ---------- Carousel ---------- */
+.carousel {
+  position: relative;
+  background: var(--surface);
+}
+
+.carousel__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__slide {
+  position: relative;
+  flex: 0 0 100%;
+  display: grid;
+  align-items: center;
+  min-height: clamp(16rem, 34vw, 26rem);
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+.carousel__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darken photos so the copy stays readable */
+.carousel__slide--photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.75), rgb(0 0 0 / 0.15));
+}
+
+.carousel__copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: var(--s-3);
+  width: 100%;
+  padding-block: var(--s-7) var(--s-8);
+}
+
+.carousel__title {
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-size: var(--t-2xl);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.carousel__text {
+  max-width: 34rem;
+  margin-bottom: var(--s-3);
+  font-size: var(--t-md);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.carousel__controls {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  bottom: var(--s-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.carousel__dots,
+.carousel__arrows {
+  display: flex;
+  gap: var(--s-2);
+  pointer-events: auto;
+}
+
+.carousel__dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.carousel__dots button[aria-current='true'] {
+  background: var(--ink);
+  transform: scale(1.25);
+}
+
+.carousel__arrows button {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.4);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.carousel__arrows button:hover {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+/* ---------- Promises: envío, accesorios, garantía ---------- */
+.promises {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-4);
+  padding-bottom: var(--s-8);
+}
+
+.promises__item {
+  padding: var(--s-5);
+  border-radius: var(--r-card);
+  background: var(--card);
+}
+
+.promises__item h2 {
+  margin-top: var(--s-3);
+  font-size: var(--t-md);
+  line-height: 1.2;
+}
+
+.promises__item p {
+  margin-top: var(--s-2);
+  color: var(--ink-soft);
+}
+
+/* ---------- Offers ---------- */
+.offers {
+  padding-block: var(--s-8);
+  border-top: 1px solid var(--line);
+  scroll-margin-top: var(--header-h);
+}
+
+.offers h2 {
+  font-size: var(--t-xl);
+  line-height: 1.1;
+}
+
+.offers__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--s-4);
+  margin: var(--s-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.offers__grid li {
+  position: relative;
+}
+
+.offers__tag {
+  position: absolute;
+  top: var(--s-3);
+  left: var(--s-3);
+  z-index: 1;
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: var(--t-xs);
+  font-weight: 600;
+}
+
+/* ---------- Home FAQ ---------- */
+.home-faq {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) 2.2fr;
+  gap: var(--s-6);
+  padding-block: var(--s-8);
+  border-top: 1px solid var(--line);
+}
+
+.home-faq h2 {
+  font-size: var(--t-lg);
+  line-height: 1.15;
+}
+
+@media (max-width: 899px) {
+  .promises {
+    grid-template-columns: 1fr;
+    padding-bottom: var(--s-7);
+  }
+
+  .home-faq {
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+    padding-block: var(--s-7);
+  }
+
+  .carousel__arrows {
+    display: none;
+  }
+
+  .carousel__controls {
+    justify-content: center;
+  }
+}

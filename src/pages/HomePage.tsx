@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronRight, MapPin, PackageCheck, ShieldCheck, Truck } from 'lucide-react'
+import { ArrowRight, ChevronRight, MapPin } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router'
 import { Carousel } from '../components/Carousel'
@@ -43,21 +43,21 @@ const lines = [
   { key: 'android', title: 'Android', text: 'Motorola y otras marcas.', to: `/catalogo?${param.q}=motorola`, cta: 'Ver stock' },
 ]
 
-const promises = [
+const included = [
   {
-    Icon: Truck,
-    title: 'Envío gratis',
-    text: `En Mar del Plata, en compras desde ${freeShippingLabel}.`,
+    figure: 'Gratis',
+    title: 'Envío en Mar del Plata',
+    text: `En compras desde ${freeShippingLabel}. Te lo llevamos a tu casa.`,
   },
   {
-    Icon: PackageCheck,
+    figure: '3 en 1',
     title: 'Cable nuevo, funda y templado',
     text: 'Todos nuestros teléfonos se entregan así. Carga y protección desde el primer momento.',
   },
   {
-    Icon: ShieldCheck,
+    figure: '1 año',
     title: 'Garantía',
-    text: 'De 30 a 90 días en los usados, y de 6 meses a 1 año en los equipos nuevos.',
+    text: 'Desde 30 a 90 días en los usados, y de 6 meses a 1 año en los equipos nuevos.',
   },
 ]
 
@@ -107,19 +107,6 @@ export function HomePage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* What every purchase includes, in the owner's words */}
-      <section className="page promise" aria-label="Qué incluye tu compra">
-        <ul className="promise__list">
-          {promises.map(({ Icon, title, text }) => (
-            <li key={title} className="promise__item">
-              <Icon aria-hidden size={24} strokeWidth={1.5} />
-              <h2>{title}</h2>
-              <p>{text}</p>
-            </li>
-          ))}
-        </ul>
       </section>
 
       <Carousel slides={slides} label="Novedades" />
@@ -177,6 +164,22 @@ export function HomePage() {
             ))}
           </ol>
         </div>
+      </section>
+
+      {/* What every purchase includes, in the owner's words: after "how to buy", as type, no cards */}
+      <section className="page included reveal" aria-labelledby="included-title">
+        <h2 id="included-title">Con tu compra.</h2>
+        <ul className="included__list">
+          {included.map(({ figure, title, text }) => (
+            <li key={title}>
+              <p className="included__figure">{figure}</p>
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="page tips reveal" aria-labelledby="tips-title">

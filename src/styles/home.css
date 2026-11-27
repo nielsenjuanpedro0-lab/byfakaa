@@ -1,5 +1,5 @@
 /*
- * Home: storefront hero, one-sentence promise, stock grid, the four lines as a bento, the buying steps as type,
+ * Home: storefront hero, carousel, stock grid, the four lines as a bento, the buying steps as type,
  * featured tips, and the store. Each section uses its own layout family; one accent, one radius scale
  * (pills for actions, --r-card for surfaces).
  */
@@ -122,48 +122,6 @@
 .hero__alt:hover {
   color: var(--ink);
   text-decoration-color: var(--ink);
-}
-
-/* ---------- Promise: what every purchase includes, three equal cards ---------- */
-.promise {
-  /* pulled up into the hero's fade so no empty band sits between them; stacked above the hero */
-  position: relative;
-  z-index: 1;
-  margin-top: calc(-1 * var(--s-8));
-  padding-bottom: var(--s-7);
-}
-
-.promise__list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--s-4);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.promise__item {
-  padding: var(--s-5) var(--s-6) var(--s-6);
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: var(--card);
-}
-
-.promise__item svg {
-  color: var(--accent);
-}
-
-.promise__item h2 {
-  margin-top: var(--s-4);
-  font-size: var(--t-md);
-  font-weight: 400;
-  line-height: 1.2;
-}
-
-.promise__item p {
-  margin-top: var(--s-2);
-  font-size: var(--t-sm);
-  color: var(--ink-soft);
 }
 
 /* ---------- Available: stock grid ---------- */
@@ -361,6 +319,58 @@
 .steps__text {
   max-width: 26ch;
   margin-top: var(--s-3);
+  color: var(--ink-soft);
+}
+
+/* ---------- Included: what every purchase brings, a spec list set as type ---------- */
+.included {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) 2.2fr;
+  gap: var(--s-6);
+  padding-block: var(--s-8);
+}
+
+.included h2 {
+  font-size: var(--t-xl);
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.included__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.included__list li {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  align-items: baseline;
+  gap: var(--s-6);
+  padding-block: var(--s-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.included__figure {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.75rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.included__list h3 {
+  font-size: var(--t-md);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.included__list li p:not(.included__figure) {
+  max-width: 44ch;
+  margin-top: var(--s-1);
   color: var(--ink-soft);
 }
 
@@ -745,7 +755,7 @@
   max-width: 18ch;
   font-family: var(--font-display);
   font-size: var(--t-2xl);
-  font-weight: 700;
+  font-weight: 300;
   line-height: 1.05;
   letter-spacing: -0.03em;
 }
@@ -890,31 +900,15 @@
 }
 
 @media (max-width: 899px) {
-  .promise {
-    margin-top: 0;
-  }
-
-  .promise__list {
+  .included {
     grid-template-columns: 1fr;
-    gap: var(--s-3);
+    gap: var(--s-5);
+    padding-block: var(--s-7);
   }
 
-  /* compact rows on phones: icon beside the text */
-  .promise__item {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: var(--s-4);
-    padding: var(--s-4) var(--s-5);
-  }
-
-  .promise__item svg {
-    grid-row: span 2;
-    margin-top: 2px;
-  }
-
-  .promise__item h2 {
-    margin-top: 0;
-    font-size: var(--t-base);
+  .included__list li {
+    grid-template-columns: 6.5rem 1fr;
+    gap: var(--s-4);
   }
 
   .home-faq {
@@ -925,6 +919,11 @@
 
   .carousel__arrows {
     display: none;
+  }
+
+  /* copy spans the full width on phones, so darken the whole photo evenly */
+  .carousel__slide--photo::after {
+    background: rgb(0 0 0 / 0.62);
   }
 
   .carousel__controls {
